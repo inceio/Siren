@@ -1,0 +1,1 @@
+{"scenes":["default"],"active_s":"default","patterns":[{"scene":"default","name":"def","params":"x","text":"sound \"gen2\" # end  `x`"}],"channels":[{"scene":"default","name":"d1","type":"Tidal","steps":6,"rate":8,"time":47,"transition":"","cells":["","def  `1` ","","","def  `1` ",""],"gate":true,"solo":false,"mute":false,"loop":true,"executed":false,"selected":false,"cid":0}]}

@@ -1,0 +1,110 @@
+[
+ {
+  "w": 3,
+  "h": 20,
+  "x": 0,
+  "y": 19,
+  "i": "scenes",
+  "minW": 3,
+  "moved": false,
+  "static": false,
+  "isVisible": true
+ },
+ {
+  "w": 8,
+  "h": 19,
+  "x": 0,
+  "y": 0,
+  "i": "matrix",
+  "minW": 5,
+  "moved": false,
+  "static": false,
+  "isVisible": true
+ },
+ {
+  "w": 6,
+  "h": 13,
+  "x": 2,
+  "y": 63,
+  "i": "patterns",
+  "minW": 3,
+  "moved": false,
+  "static": false,
+  "isVisible": true
+ },
+ {
+  "w": 6,
+  "h": 24,
+  "x": 2,
+  "y": 39,
+  "i": "console",
+  "minW": 2,
+  "moved": false,
+  "static": false,
+  "isVisible": true
+ },
+ {
+  "w": 15,
+  "h": 7,
+  "x": 3,
+  "y": 13,
+  "i": "canvas",
+  "minW": 7,
+  "moved": false,
+  "static": false,
+  "isVisible": false
+ },
+ {
+  "w": 7,
+  "h": 13,
+  "x": 0,
+  "y": 22,
+  "i": "paths",
+  "minW": 7,
+  "moved": false,
+  "static": false,
+  "isVisible": false
+ },
+ {
+  "w": 12,
+  "h": 3,
+  "x": 0,
+  "y": 20,
+  "i": "pattern_history",
+  "minW": 3,
+  "moved": false,
+  "static": false,
+  "isVisible": false
+ },
+ {
+  "w": 7,
+  "h": 13,
+  "x": 5,
+  "y": 48,
+  "i": "debugconsole",
+  "minW": 7,
+  "moved": false,
+  "static": false,
+  "isVisible": false
+ },
+ {
+  "w": 3,
+  "h": 4,
+  "x": 3,
+  "y": 48,
+  "i": "channel_add",
+  "minW": 2,
+  "moved": false,
+  "static": false,
+  "isVisible": false
+ },
+ {
+  "i": "globals",
+  "x": 6,
+  "y": 16,
+  "w": 5,
+  "h": 4,
+  "minW": 4,
+  "isVisible": false
+ }
+]

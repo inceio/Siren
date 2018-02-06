@@ -4,6 +4,8 @@ body {
 }
 
 * {
+  font-family: 'Inconsolata';
+  font-weight: 40;
   background: none;
   color: #ddd;
 }
