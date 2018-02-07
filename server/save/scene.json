@@ -1,0 +1,1 @@
+{"scenes":["default"],"active_s":"default","patterns":[{"scene":"default","name":"def","params":"","text":"sound \"bd\" # end `x`"}],"channels":[{"scene":"default","name":"d1","type":"Tidal","steps":8,"cells":["","","","","","","",""],"transition":"","rate":8,"gate":false,"solo":false,"mute":false,"loop":true,"executed":false,"selected":false,"time":0,"cid":0}]}
