@@ -1,10 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { SelectableGroup, createSelectable } from 'react-selectable';
 
 import Cell from './Cell'
-
-const SelectableComponent = createSelectable(Cell);
 
 @inject('channelStore')
 @observer
@@ -88,23 +85,16 @@ class Channel extends React.Component {
   
   render() {
     console.log('RENDER CHANNEL');
-    const { item } = this.props;
+    const { item, index } = this.props;
 
     let channelClass = "ChannelItem";
-    if ((!item.loop) || ( item.mute) || (this.props.channelStore.soloEnabled && !item.solo))
-    {
+    if ((!item.loop) || ( item.mute) || (this.props.channelStore.soloEnabled && !item.solo)) {
       channelClass += " disabled";
     }
     return (<div className={channelClass}>
         <ChannelHeader key={item.scene+"_"+item.name} value={item}/>
         {item.cells.map((c, i) => {
-           return <SelectableComponent
-                key={i}
-                selectableKey={item.scene+'_'+item.name+'_'+i}
-                item={item}
-                index={i}
-                value={c}>
-            </SelectableComponent>
+           return <Cell key={i} item={item} channel_index={index} index={i} value={c}/>
         })}
         <div className={'ChannelItemSteps'}>
             <button className={"Button"}
@@ -118,6 +108,7 @@ class Channel extends React.Component {
   }
 }
 
+
 @inject('channelStore')
 @observer
 export default class Grid extends React.Component {
@@ -126,20 +117,11 @@ export default class Grid extends React.Component {
     console.log('RENDER GRID');
     
     return (
-      <div>
-        <SelectableGroup className={'AllChannels draggableCancel PanelAdjuster'}
-          onSelection={(selected) => 
-            (this.props.channelStore.updateSelectedCells(selected))}
-          onNonItemClick={() => 
-            (this.props.channelStore.clearSelectedCells())}
-          tolerance={5}
-          selectOnMouseMove={false}
-          enabled={false}>
+      <div className={'AllChannels draggableCancel PanelAdjuster'}>
         {this.props.channelStore.getActiveChannels
-            .map(t => {
-                return <Channel key={t.scene+"_"+t.name} item={t} />;
+            .map((t, i) => {
+                return <Channel key={t.scene+"_"+t.name} item={t} index={i}/>;
             })}
-        </SelectableGroup>
       </div>
     );
   }

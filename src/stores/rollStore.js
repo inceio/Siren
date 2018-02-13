@@ -16,7 +16,7 @@ class RollStore
             console.log("Port 4002 Disconnected: ", reason);
         }));
         this.sc_log.on("/sclog", action((data) => {
-            console.log(data.trigger);
+            // console.log(data.trigger);
             ctx.value = data.trigger;
 
             // PROCESS AND STORE DATA HERE

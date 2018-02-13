@@ -12,7 +12,7 @@
   transition: height 200ms ease;
 }
 .react-grid-item {
-  background: rgba(60, 60, 60, 0.75);
+  background: rgba(45, 45, 45, 1);
   border-color: black;
   transition: all 200ms ease;
   transition-property: left, top;

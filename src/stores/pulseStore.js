@@ -21,6 +21,7 @@ class PulseStore
         const ctx = this;
         this.link_pulse.on('connect', (reason) => {
             console.log("Port 4001 Connected: ", reason);
+            menubarStore.server_info = 2;
         });
         this.link_pulse.on('disconnect', action((reason) => {
             console.log("Port 4001 Disconnected: ", reason);

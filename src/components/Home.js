@@ -6,14 +6,7 @@ import Console from './Console';
 import Scene from './Scene';
 import Paths from './Paths';
 import Grid from './Channel';
-// import PrivateRoute from './PrivateRoute';
-// import Article from './Article';
-// import Editor from './Editor';
-// import Home from './Home';
-// import Login from './Login';
-// import Profile from './Profile';
-// import Register from './Register';
-// import Settings from './Settings';
+import PatternHistory from './PatternHistory';
 
 // CSS Imports
 import '../styles/_comp.css';
@@ -34,11 +27,11 @@ let keymaster = require('keymaster');
 @observer
 export default class Home extends React.Component {
   componentDidMount(){
-    keymaster('⌘+r, ctrl+s', save); 
+    keymaster('⌘+s, ctrl+s', save); 
     keymaster('ctrl+enter', timer); 
   }
   componentWillUnmount() {
-    keymaster.unbind('⌘+r, ctrl+s', save);
+    keymaster.unbind('⌘+s, ctrl+s', save);
     keymaster.unbind('ctrl+enter', timer); 
   }
 
@@ -69,7 +62,7 @@ export default class Home extends React.Component {
     else if (layoutItem.i === 'scenes') {
       return layoutItem.isVisible && (<div key={"scenes"}  data-grid={layoutStore.gridParameters('scenes')}>
         <div>
-          <div className={"PanelHeader"}> ■ All Scenes
+          <div className={"PanelHeader"}> ■ Scenes
             <span className={"PanelClose draggableCancel"} onClick={() => layoutStore.hideLayout("scenes")}>X</span>
           </div>
           <div className={'Scenes PanelAdjuster'}>
@@ -93,7 +86,9 @@ export default class Home extends React.Component {
         <div className={"PanelHeader"}> ■ Pattern History
           <span className={"PanelClose draggableCancel"} onClick={() => layoutStore.hideLayout("pattern_history")}>X</span>
         </div>
-        <div></div>
+        <div className={'defaultPatternHistoryArea PanelAdjuster'}>
+          <PatternHistory />
+        </div>
       </div>);
     }
     else if (layoutItem.i === 'channel_add') {

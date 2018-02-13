@@ -53,7 +53,7 @@ class ConsoleStore
       request.post('http://localhost:3001/console', { 'sc':    this.sc_text, 
                                                       'tidal': this.tidal_text })
               .then((response) => {
-                  console.log(" ## Console save response: ", response);
+                  console.log(" ## Console save response: ");
               }).catch(function (error) {
                   console.error(" ## ConsoleStore errors: ", error);
               });

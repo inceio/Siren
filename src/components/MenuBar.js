@@ -56,7 +56,7 @@ export default class MenuBar extends React.Component {
             <img src={require('../assets/stop@3x.png')} title={'Stop Pulse'}
                 onClick={() => (this.props.pulseStore.stopPulse())} alt="" height={45} width={45}/>}
         </div>
-        <button className={"OtherControls Button"} title={"Save"} onClick={save}>⮋</button>
+        <button className={"OtherControls Button"} title={"Save"} onClick={save}>⇩</button>
         <button className={"OtherControls Button"} title={"Refresh Page"} 
           onClick={() => {if(window.confirm('Do you want to refresh page? Unsaved changes will be destroyed.')) {
             window.location.reload(false)}}}>⭯</button>

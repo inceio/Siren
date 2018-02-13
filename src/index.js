@@ -21,6 +21,9 @@ import channelStore from './stores/channelStore';
 import rollStore from './stores/rollStore';
 import historyStore from './stores/historyStore';
 import globalStore from './stores/globalStore';
+import cellStore from './stores/cellStore';
+import nanoStore from './stores/nanoStore';
+
 
 const stores = {
   layoutStore,
@@ -33,7 +36,9 @@ const stores = {
   pathStore,
   rollStore,
   historyStore,
-  globalStore
+  globalStore,
+  cellStore,
+  nanoStore
 };
 
 // For easier debugging

@@ -2,6 +2,7 @@
 import sceneStore from '../src/stores/sceneStore'
 import pulseStore from '../src/stores/pulseStore'
 import consoleStore from '../src/stores/consoleStore'
+import channelStore from '../src/stores/channelStore'
 
 
 export const save = () => {
@@ -17,4 +18,11 @@ export const timer = () => {
     else
         pulseStore.startPulse();
 }
+
+// export const selectNCells = () => {
+//     if ((array === undefined || channelStore.selected_cells.length == 0)) 
+//         pulseStore.stopPulse();
+//     else
+//         pulseStore.startPulse();
+// }
 

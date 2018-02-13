@@ -51,27 +51,65 @@ class REPL {
     // python.stderr.on('data', (data) => {
     // console.error(`node-python stderr:\n${data}`);
     // });
-    nanoKONTROL.connect('nanoKONTROL2').then((device) => {
-      device.on('slider:*', function(value){
-        //console.log(this.event+' => '+value);
-        //SuperCollider
-        let scorbit;
-        let defval = value.map(0, 127, 0, 2);
-        // let scmod = _.replace(this.event,"slider:","")
-        // scmod = "~dirt.orbits[" + scmod+ "].set(\\amp,"+ defval + ");"// reduce the amplitude of one orbit
-        // SirenComm.siren_console.sendSCLang(scmod); 
+    // let nano_socket = socketIo.listen(4003);
+    // nanoKONTROL.connect('nanoKONTROL2').then((device) => {
+      
+    //   device.on('slider:*', function(value){
+    //     //console.log(this.event+' => '+value);
+    //     //SuperCollider
+    //     let scorbit;
+    //     let slider_value = value.map(0, 127, 0, 2);
+    //     let slider_index = _.replace(this.event,"slider:","")
+    //     let sc_msg = "~dirt.orbits[" + slider_index+ "].set(\\amp,"+ slider_value + ");"// reduce the amplitude of one orbit
+    //     SirenComm.siren_console.sendSCLang(sc_msg); 
 
-        //last 2 dif functions
-      });
+    //     //last 2 dif functions
+    //   });
       
-      device.on('knob:*', function(value){
-        console.log(this.event+' => '+value);
-      });
+    //   device.on('knob:*', function(value){
+    //     console.log(this.event+' => '+value);
+    //     let knob_value = value.map(0, 127, 0, 2);
+    //     let knob_index = _.replace(this.event,"knob:","");
+
+    //     nano_socket.sockets.emit('/nanoknob', {index: knob_index, value: knob_value});
+    //   });
       
-      device.on('button:**', function(value){
-        console.log(this.event+' => '+value);
-      });
-    });
+    //   device.on('button:**', function(value){
+    //     console.log(this.event+' => '+value);
+    //     //gate: false ,solo: false, mute: false, loop: true//
+    //     let button_value = value;
+    //     let button_index = _.replace(this.event,"button:","");
+    //     console.log(button_index);
+    //     switch (button_index) {
+    //       case 'next':
+      
+    //         break;
+    //       case 'prev':
+            
+    //         break;
+    //       case 'play':
+    //         if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: true});
+    //         break;
+    //       case 'stop':
+    //         if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: false});
+    //         break;
+    //       case 'rec':
+    //         if(button_value === 'true'){
+    //           let sc_msg = "Server.default.record;"; SirenComm.siren_console.sendSCLang(sc_msg); 
+    //         }
+    //         else{
+    //           let sc_msg = "Server.default.stopRecording"; SirenComm.siren_console.sendSCLang(sc_msg); 
+    //         }
+    //         break;        
+    //       default:
+    //         break;
+    //     }
+    //     button_index = _.replace(button_index, ":", "");
+    //     if(button_index !== undefined){
+    //       nano_socket.sockets.emit('/nanobutton', {type:button_index[0], index: button_index[1], value: button_value});
+    //     }
+    //   });
+    // });
   }
 
   initGHC(config) {
@@ -211,7 +249,9 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 }
 
 const Siren = () => {
+
     const app = express();
+
     var tidalPatternQueue = new Queue((pat, cb) => {
       SirenComm.siren_console.tidalSendLine(pat);
       console.log("HEREQUEUE", pat);
@@ -429,7 +469,7 @@ const Siren = () => {
               }
             pattern = transitionHolder + newCommand;
             tidalPatternQueue.push(pattern);
-            reply.status(200).json({pattern: pattern, cid: channel.cid});
+            reply.status(200).json({pattern: pattern, cid: channel.cid, timestamp: new Date().getMilliseconds()});
           }
           else{
             reply.sendStatus(400); 
@@ -497,6 +537,12 @@ const Siren = () => {
       reply.sendStatus(200);
     });
   
+    app.post('/nano_ghc', (req, reply) => {
+      const { pattern, channel } = req.body;
+      console.log(' ## -->   Pattern inbound:', pattern);
+      tidalPatternQueue.push(pattern);
+      reply.status(200).json({pattern: pattern, cid: channel.cid, timestamp: new Date().getMilliseconds()});
+    });
     app.post('/console_sc', (req, reply) => {
       const { pattern } = req.body;
       console.log(' ## -->   SC Pattern inbound:', pattern);

@@ -5,8 +5,9 @@ import pulseStore from './pulseStore';
 import sceneStore from './sceneStore';  
 import patternStore from './patternStore';  
 import historyStore from './historyStore';  
-import request from '../utils/request'
 import globalStore from './globalStore';
+
+import request from '../utils/request'
 
 class ChannelStore 
 {
@@ -28,48 +29,29 @@ class ChannelStore
         cid: 0
     }];
     @observable soloEnabled = false;
-
-    @observable selected_cells = [];
-
-    // Structure: SCENENAME_CHANNELNAME_CELLINDEX
-    @action updateSelectedCells(cells) {
-        _.forEach(cells, (i) => {
-            const selection = _.split(i, '_');
-            const obj = {
-                scene: selection[0], 
-                channel: selection[1], 
-                cell: _.toInteger(selection[2])
-            };
-
-            if (this.isCellSelected(obj.channel, obj.cell)) {
-                this.selected_cells = _.reject(this.selected_cells, { 'scene': obj.scene,
-                                                                      'channel': obj.channel, 
-                                                                      'cell': obj.cell  });
-            }
-            else {
-                this.selected_cells.push(obj);
-            }
-        })   
+    
+    @action updateChannel(index, type, value){
+        let activeChannels = this.getActiveChannels;
+        switch (type) {
+            case 's':
+            if(activeChannels[index]!== undefined) activeChannels[index].solo = value;
+                break;
+            case 'm':
+            if(activeChannels[index]!== undefined) activeChannels[index].mute = value;
+                break;
+            case 'r':
+            if(activeChannels[index]!== undefined) activeChannels[index].gate = value;
+                break;
+            default:
+                break;
+        }
     }
-
-    @action clearSelectedCells() {
-        this.selected_cells = [];
-    }
-
+    
     @action clearChannel(name) {
         let ch = _.find(this.channels, { 'name': name, 'scene': sceneStore.active_scene });
         if(ch !== undefined) {
             ch.cells = _.fill(Array(ch.steps), '');
         }
-    }
-
-    isCellSelected(channel, cell_index) {
-        let ch = _.find(this.selected_cells, { 'scene': sceneStore.active_scene,
-                                               'channel': channel,
-                                               'cell': cell_index
-                                            });
-        if(ch) return true;
-        return false;
     }
 
     @action resetTime(name) {
@@ -101,32 +83,26 @@ class ChannelStore
             console.log(" ## Pattern response: ", response.data.pattern);
             console.log(" ## CID response: ", response.data.cid);
             if (response){
-                historyStore.updateHistory(response.data.pattern, response.data.cid);
+                historyStore.updateHistory(response.data.pattern, response.data.cid, response.data.timestamp);
             }
             
             
         }).catch(function (error) {
             console.error(" ## Pattern errors: ", error);
-            });
-        
-    }
-
-    isCellActive(channel, index) {
-        let ch = _.find(this.channels, { 'name': channel, 'scene': sceneStore.active_scene });
-        if(ch !== undefined) {
-            return ch.time % ch.steps === index;
-        }
+        });
     }
 
     @computed get getActiveChannels() {
         return this.channels.filter(c => c.scene === sceneStore.active_scene);
     }
 
-    // CELL UPDATE
-    @action updateCell(channel, cell_index, cell_value) {
-        let ch = _.find(this.channels, { 'name': channel, 'scene': sceneStore.active_scene });
-        if(ch !== undefined) {
-            ch.cells[cell_index] = cell_value;
+    @action overwriteCell(scene_channel_index, cell_index, value) {
+        let activeChannels = this.getActiveChannels;
+        if(scene_channel_index < activeChannels.length && 
+           cell_index < activeChannels[scene_channel_index].steps) {
+            console.log("CHANNEL", scene_channel_index, cell_index, value);
+            
+            activeChannels[scene_channel_index].cells[cell_index] = value;
         }
     }
 
@@ -242,8 +218,8 @@ class ChannelStore
         if(ch !== undefined) {
             const temp = ch.time % ch.steps;
             ch.steps += 1;
-            ch.cells.push('');
             ch.time = temp;
+            ch.cells.push('');
         }
     }
 

@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import patternStore from './patternStore';
 import channelStore from './channelStore';
+import cellStore from './cellStore';
 
 // nodejs connections
 import request from '../utils/request'
@@ -25,6 +26,7 @@ class SceneStore
     }
     @action changeActiveScene(name) {
         this.active_scene = name;
+        cellStore.updateSelectState(false);
     }
 
     @action clearActiveGrid() {
