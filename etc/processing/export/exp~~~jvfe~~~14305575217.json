@@ -1,0 +1,45 @@
+{
+  "loop": 1,
+  "start": 0,
+  "messages": [
+    {
+      "s": "foil0",
+      "cps": 1,
+      "delta": 0,
+      "orbit": 0,
+      "cycle": 2.013333320617676,
+      "t_index": 12,
+      "n": 0
+    },
+    {
+      "s": "foil0",
+      "cps": 1,
+      "delta": 0,
+      "orbit": 0,
+      "cycle": 4.009523391723633,
+      "t_index": 36,
+      "n": 0
+    },
+    {
+      "s": "foil0",
+      "cps": 1,
+      "delta": 0,
+      "orbit": 0,
+      "cycle": 6.066666603088379,
+      "t_index": 60,
+      "n": 0
+    },
+    {
+      "s": "foil0",
+      "cps": 1,
+      "delta": 0,
+      "orbit": 0,
+      "cycle": 8.1009521484375,
+      "t_index": 85,
+      "n": 0
+    }
+  ],
+  "end": 8,
+  "resolution": 12,
+  "speed": 1
+}
