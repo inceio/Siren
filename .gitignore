@@ -8,8 +8,8 @@ coverage
 
 # production
 build
-deps/
-config/
+deps
+config
 # misc
 .DS_Store
 npm-debug.log
