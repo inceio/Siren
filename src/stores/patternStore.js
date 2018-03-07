@@ -68,6 +68,9 @@ class PatternStore
     @action deletePattern(name, active_scene) {
         this.patterns = _.reject(this.patterns, { 'name': name, 'scene': active_scene });
     }
+    @action deleteAllPatternsInScene(scene) {
+        this.patterns = _.reject(this.patterns, { 'scene': scene });
+    }
 }
 
 export default new PatternStore();

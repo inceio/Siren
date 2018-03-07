@@ -6,6 +6,7 @@ import '../styles/_comp.css';
 import '../styles/Layout.css';
 import '../styles/App.css';
 import '../styles/MenuBar.css';
+import Popup from "reactjs-popup";
 
 //Keys
 import { save } from '../keyFunctions'
@@ -57,6 +58,28 @@ export default class MenuBar extends React.Component {
           {this.props.pulseStore.isActive && 
             <img src={require('../assets/stop@3x.png')} title={'Stop Pulse'}
                 onClick={() => (this.props.pulseStore.stopPulse())} alt="" height={45} width={45}/>}
+                
+        </div>
+        <div>
+        <Popup trigger={<button className={"OtherControls Button"} >Help</button>} position="bottom">
+        <div>
+        <strong>Keybinds
+        </strong> 
+        Compile: cmd/ctrl + enter
+        <br/>
+        Cell Selection: Enter
+        <br/>
+        Multiple Cell Selection: Shift + Enter
+        <br/>
+        Copy Cells: cmd/ctrl + Enter
+        <br/>
+        Cut Cells: cmd/ctrl + X
+        <br/>
+        Paste Cells: cmd/ctrl + V
+
+        
+        </div>
+          </Popup>
         </div>
         <button className={"OtherControls Button"} title={"Save"} onClick={save}>⇩</button>
         <button className={"OtherControls Button"} title={"Refresh Page"} 

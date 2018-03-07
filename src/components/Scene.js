@@ -5,15 +5,28 @@ import _ from 'lodash';
 @inject('sceneStore')
 @observer
 export default class Scene extends React.Component {
-       renderScene(item, i) {
-        
+    executionCss = (event, duration = 500) => {
+        event.persist();
+        event.target.className += ' Executed';
+        _.delay( () => (_.replace(event.target.className, ' Executed', '') ),
+                duration);
+    }
+
+    handleControlEnter = (event) => {
+        if(event.ctrlKey && event.keyCode === 13){
+            this.executionCss(event);
+            this.props.sceneStore.addScene(document.getElementById('new_scene_input').value)
+        }
+    }
+    
+    
+    renderScene(item, i) {
         const class_name = this.props.sceneStore.isActive(item) ? "SceneItem-active" : "SceneItem";
         return (
             <div key={"s_"+i} className={ class_name+ " draggableCancel"}>
-                <div>    
-                    {<button onClick={() => (this.props.sceneStore.deleteScene(item))}>{'X'}</button>}
-                    {<button className = {'SceneName'} onClick={() => (this.props.sceneStore.changeActiveScene(item))}>{item}</button>}
-                </div>
+                {<button className={'SceneName'}
+                    onClick={() => (this.props.sceneStore.changeActiveScene(item))}>{item}</button>}
+                {item !== 'default' && <button onClick={() => (this.props.sceneStore.deleteScene(item))}>{'X'}</button>}
             </div>
         )
     }
@@ -23,12 +36,13 @@ export default class Scene extends React.Component {
         
         return (<div>
             <input className={'Input draggableCancel'} id={"new_scene_input"}
-                    placeholder={'New Scene Name'}/>
-            <div style={{display: 'inline-flex', justifyContent: 'space-around'}}>
-                {<button className={'Button draggableCancel'} 
-                        onClick={() => (this.props.sceneStore.addScene(document.getElementById('new_scene_input').value))}>Add </button>}
-                {<button className={'Button draggableCancel'} 
-                        onClick={() => (this.props.sceneStore.duplicateScene(document.getElementById('new_scene_input').value))}>Dup.</button>}
+                placeholder={'New Scene Name'}
+                onKeyUp={this.handleControlEnter.bind(this)}/>
+            <div className={'ScenesButtons'}>
+                <button className={'Button draggableCancel'} 
+                        onClick={() => (this.props.sceneStore.addScene(document.getElementById('new_scene_input').value))}>Add </button>
+                <button className={'Button draggableCancel'} 
+                        onClick={() => (this.props.sceneStore.duplicateScene(document.getElementById('new_scene_input').value))}>Dup.</button>
                 <button className={'Button draggableCancel'} 
                         onClick={() => (this.props.sceneStore.clearActiveGrid())}>Clear</button>
             </div>

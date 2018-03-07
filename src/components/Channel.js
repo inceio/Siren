@@ -16,7 +16,7 @@ class ChannelHeader extends React.Component {
             <div className={"ChannelItemHeader-middle"}>
                 <div className={"ChannelItemHeader-titleDiv"}>
                     <input ref={(input_name) => { this.nameInputName = input_name; }}
-                        title={"Channel Name ("+item.name+")"}
+                        title={"Channel Name (" + item.name + ")"}
                         className={"ChannelItemHeader-title ChannelItemHeader-text draggableCancel"}
                         placeholder={" name "}  
                         value={item.name}
@@ -84,15 +84,15 @@ class ChannelHeader extends React.Component {
 class Channel extends React.Component {
   
   render() {
-    console.log('RENDER CHANNEL');
     const { item, index } = this.props;
+    console.log('RENDER CHANNEL', item);
 
     let channelClass = "ChannelItem";
     if ((!item.loop) || ( item.mute) || (this.props.channelStore.soloEnabled && !item.solo)) {
       channelClass += " disabled";
     }
     return (<div className={channelClass}>
-        <ChannelHeader key={item.scene+"_"+item.name} value={item}/>
+        <ChannelHeader key={index} value={item}/>
         {item.cells.map((c, i) => {
            return <Cell key={i} item={item} channel_index={index} index={i} value={c}/>
         })}
@@ -112,29 +112,29 @@ class Channel extends React.Component {
 @observer
 export default class Grid extends React.Component {
     onDragStop = (event, position) => {
-        const ctx = this;
-        console.log(position);
+        console.log("ondrag", position);
         let y =  _.toInteger(position.layerY/40)*40;
         this.props.channelStore.seekTimer(y);
-        
     }
     
-  render() {
-    console.log('RENDER GRID');
-    let pos;
-    const ctx = this;
-    return (
-      <div className={'AllChannels draggableCancel PanelAdjuster'}>
-            
-      <Draggable position={pos} axis="y" bounds="parent" grid={[40, 40]} onStop={this.onDragStop.bind(this,pos)}>
-        <div className="Timeline">
+    render() {
+        console.log('RENDER GRID');
+        let pos;
+
+        // TODO: FIX SLIDER 'pos' 
+        return (<div className={'AllChannels draggableCancel PanelAdjuster'}>    
+            <Draggable position={pos}
+                axis="y" bounds="parent"
+                grid={[40, 40]}
+                onStop={this.onDragStop.bind(this, pos)}>
+                <div className="Timeline"></div>
+            </Draggable>
+                    
+            {this.props.channelStore.getActiveChannels
+                .map((t, i) => {
+                    return <Channel key={t.scene+"_"+t.name} item={t} index={i}/>;
+                })}
         </div>
-      </Draggable>
-        {this.props.channelStore.getActiveChannels
-            .map((t, i) => {
-                return <Channel key={t.scene+"_"+t.name} item={t} index={i}/>;
-            })}
-      </div>
-    );
-  }
+        );
+    }
 }

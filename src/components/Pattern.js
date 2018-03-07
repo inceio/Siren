@@ -11,6 +11,21 @@ import '../styles/_style.css'
 @observer
 export default class Patterns extends React.Component {
   
+    executionCss = (event, duration = 500) => {
+        event.persist();
+        event.target.className += ' Executed';
+        _.delay( () => (_.replace(event.target.className, ' Executed', '') ),
+                duration);
+    }
+
+    handleControlEnter = (event) => {
+        if(event.ctrlKey && event.keyCode === 13){
+            this.executionCss(event);
+            this.props.patternStore.addPattern(
+                document.getElementById('add_pattern_input').value, 
+                this.props.sceneStore.activeScene)
+        }
+    }
     renderItem(item, i) {
         let options = {
             mode: '_rule',
@@ -21,11 +36,12 @@ export default class Patterns extends React.Component {
             showToken:true,
             lineWrapping: true,
             showCursorWhenSelecting: true
-        };
-
-        return (
-            <div key={'p'+i} className={"PatternItem draggableCancel"}>
-                <div>
+    };
+   
+    
+    return (
+        <div key={'p'+i} className={"PatternItem draggableCancel"}>
+            <div>
                 <div className={'PatternItemInputs'}>
                     <input type="String"
                         className={'Input draggableCancelNested'} 
@@ -36,7 +52,8 @@ export default class Patterns extends React.Component {
                                 item.name, 
                                 event.target.value,
                                 document.getElementById('add_pattern_input').value)
-                        }}/>
+                        }}
+                        />
                     <input type="String"
                         className={'Input draggableCancelNested'}  
                         placeholder={"Parameters"}  
@@ -62,8 +79,8 @@ export default class Patterns extends React.Component {
                             }}
                             onChange={() => {}}
                             />
-                </div>
-            </div>)
+            </div>
+        </div>)
     }
 
     render() {
@@ -74,12 +91,14 @@ export default class Patterns extends React.Component {
                 <div className={'PatternItem PatternItemInputs'}>
                 <input type="text" id={'add_pattern_input'}
                         className={'Input draggableCancel'} 
-                        placeholder={'New Pattern Name'} />
+                        placeholder={'New Pattern Name'}
+                        onKeyUp={this.handleControlEnter.bind(this)}/>
                 <button className={'Button draggableCancel'} 
                         onClick={() => (this.props.patternStore.addPattern(
                             document.getElementById('add_pattern_input').value, 
                             this.props.sceneStore.activeScene)
-                        )}>Add</button>
+                        )}>Add
+                </button>
                 </div>
 
                 {_.map(this.props.patternStore.patterns.filter(l => l.scene === this.props.sceneStore.activeScene), 

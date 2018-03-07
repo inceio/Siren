@@ -52,65 +52,67 @@ class REPL {
     // python.stderr.on('data', (data) => {
     // console.error(`node-python stderr:\n${data}`);
     // });
-    // let nano_socket = socketIo.listen(4003);
-    // nanoKONTROL.connect('nanoKONTROL2').then((device) => {
-      
-    //   device.on('slider:*', function(value){
-    //     //console.log(this.event+' => '+value);
-    //     //SuperCollider
-    //     let scorbit;
-    //     let slider_value = value.map(0, 127, 0, 2);
-    //     let slider_index = _.replace(this.event,"slider:","")
-    //     let sc_msg = "~dirt.orbits[" + slider_index+ "].set(\\amp,"+ slider_value + ");"// reduce the amplitude of one orbit
-    //     SirenComm.siren_console.sendSCLang(sc_msg); 
 
-    //     //last 2 dif functions
-    //   });
+    // KORG 
+    let nano_socket = socketIo.listen(4003);
+    nanoKONTROL.connect('nanoKONTROL2').then((device) => {
       
-    //   device.on('knob:*', function(value){
-    //     console.log(this.event+' => '+value);
-    //     let knob_value = value.map(0, 127, 0, 2);
-    //     let knob_index = _.replace(this.event,"knob:","");
+      device.on('slider:*', function(value){
+        //console.log(this.event+' => '+value);
+        //SuperCollider
+        let scorbit;
+        let slider_value = value.map(0, 127, 0, 2);
+        let slider_index = _.replace(this.event,"slider:","")
+        let sc_msg = "~dirt.orbits[" + slider_index+ "].set(\\amp,"+ slider_value + ");"// reduce the amplitude of one orbit
+        SirenComm.siren_console.sendSCLang(sc_msg); 
 
-    //     nano_socket.sockets.emit('/nanoknob', {index: knob_index, value: knob_value});
-    //   });
+        //last 2 dif functions
+      });
       
-    //   device.on('button:**', function(value){
-    //     console.log(this.event+' => '+value);
-    //     //gate: false ,solo: false, mute: false, loop: true//
-    //     let button_value = value;
-    //     let button_index = _.replace(this.event,"button:","");
-    //     console.log(button_index);
-    //     switch (button_index) {
-    //       case 'next':
+      device.on('knob:*', function(value){
+        // console.log(this.event+' => '+value);
+        let knob_value = value.map(0, 127, 0, 2);
+        let knob_index = _.replace(this.event,"knob:","");
+
+        nano_socket.sockets.emit('/nanoknob', {index: knob_index, value: knob_value});
+      });
       
-    //         break;
-    //       case 'prev':
+      device.on('button:**', function(value){
+        // console.log(this.event+' => '+value);
+        //gate: false ,solo: false, mute: false, loop: true//
+        let button_value = value;
+        let button_index = _.replace(this.event,"button:","");
+        // console.log(button_index);
+        switch (button_index) {
+          case 'next':
+      
+            break;
+          case 'prev':
             
-    //         break;
-    //       case 'play':
-    //         if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: true});
-    //         break;
-    //       case 'stop':
-    //         if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: false});
-    //         break;
-    //       case 'rec':
-    //         if(button_value === 'true'){
-    //           let sc_msg = "Server.default.record;"; SirenComm.siren_console.sendSCLang(sc_msg); 
-    //         }
-    //         else{
-    //           let sc_msg = "Server.default.stopRecording"; SirenComm.siren_console.sendSCLang(sc_msg); 
-    //         }
-    //         break;        
-    //       default:
-    //         break;
-    //     }
-    //     button_index = _.replace(button_index, ":", "");
-    //     if(button_index !== undefined){
-    //       nano_socket.sockets.emit('/nanobutton', {type:button_index[0], index: button_index[1], value: button_value});
-    //     }
-    //   });
-    // });
+            break;
+          case 'play':
+            if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: true});
+            break;
+          case 'stop':
+            if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: false});
+            break;
+          case 'rec':
+            if(button_value === 'true'){
+              let sc_msg = "Server.default.record;"; SirenComm.siren_console.sendSCLang(sc_msg); 
+            }
+            else{
+              let sc_msg = "Server.default.stopRecording"; SirenComm.siren_console.sendSCLang(sc_msg); 
+            }
+            break;        
+          default:
+            break;
+        }
+        button_index = _.replace(button_index, ":", "");
+        if(button_index !== undefined){
+          nano_socket.sockets.emit('/nanobutton', {type:button_index[0], index: button_index[1], value: button_value});
+        }
+      });
+    });
   }
 
   initGHC(config) {
@@ -124,7 +126,7 @@ class REPL {
 
   initSCSynth(config, reply) {
     const self = this;
-    console.log(config.path, config);
+    // console.log(config.path, config);
     
     // TODO: config.path does not exist, possible fix
     supercolliderjs.resolveOptions(config.path).then((options) => {
@@ -145,6 +147,7 @@ class REPL {
 
         // On SC Message
         sclang.on('stdout', (d) => {
+          sclog.sockets.emit('/scdebuglog', {msg: d});
           if(_.startsWith(d, 'SIREN LOADED')) {
             reply.sendStatus(200);
           }
@@ -198,6 +201,7 @@ class REPL {
               // console.log(spat);
 
               // Message to React frontend
+  
               sclog.sockets.emit('/sclog', {trigger: cycleInfo});
             }
           }
@@ -335,6 +339,7 @@ const Siren = () => {
       sendScPattern("s.quit;", null);
       stopPulse(null);
       SirenComm.siren_console = null;
+      this.repl.exit();
     };
 
     const sendScPattern = (pattern, reply) => {
@@ -428,6 +433,7 @@ const Siren = () => {
       if(channel.type === "PatternRoll") {
        
         //Pattern Roll function
+        // -- PYTHON
 
       }
       else {
@@ -569,7 +575,7 @@ const Siren = () => {
       if( paths ) {
         jsonfile.writeFileSync('./server/save/paths.json', 
                                 paths , 
-                                {flag: 'w'});
+                                {spaces: 1, flag: 'w'});
 
         reply.sendStatus(200);
       }
@@ -594,7 +600,7 @@ const Siren = () => {
                                     'active_s': active_s, 
                                     'patterns': patterns,
                                     'channels': channels }, 
-                                  {flag: 'w'});
+                                    {spaces: 1, flag: 'w'});
 
           reply.sendStatus(200);
         }
@@ -619,7 +625,7 @@ const Siren = () => {
       if( globals ) {
         jsonfile.writeFileSync('./server/save/globals.json', 
                                 globals, 
-                                {flag: 'w'});
+                                {spaces: 1, flag: 'w'});
 
         reply.sendStatus(200);
       }
@@ -638,7 +644,7 @@ const Siren = () => {
     // Save Console
     app.post('/console', (req, reply) => {
       const { sc, tidal } = req.body;
-      console.log(tidal, sc, req.body);
+      // console.log(tidal, sc, req.body);
       if( tidal !== undefined && sc !== undefined) {
         
         jsonfile.writeFileSync('./server/save/console.json', 
@@ -663,26 +669,26 @@ const Siren = () => {
 
     // Save Layouts
     app.post('/layouts', (req, reply) => {
-        const { layouts } = req.body;
+      const { layouts, customs } = req.body;
 
-        if( layouts ) {
-          jsonfile.writeFileSync('./server/save/layout.json', 
-                                  layouts, 
-                                  {spaces: 1, flag: 'w'});
+      if( layouts ) {
+        jsonfile.writeFileSync('./server/save/layout.json', 
+                                { 'layouts' : layouts, 'customs' : customs }, 
+                                {spaces: 1, flag: 'w'});
 
-          reply.status(200).json({ saved: true });
-        }
-        else
-          reply.status(400).json({ saved: false });
+        reply.status(200).json({ saved: true });
+      }
+      else
+        reply.status(400).json({ saved: false });
     });
 
     // Load Layouts
     app.get('/layouts', (req, reply) => {
       const obj = jsonfile.readFileSync('./server/save/layout.json');
       if ( obj )
-        reply.status(200).json({ layouts: obj });
+        reply.status(200).json({ layouts: obj.layouts, customs: obj.customs });
       else
-        reply.status(404).json({ layouts: undefined });
+        reply.status(404).json({ layouts: undefined, customs: undefined });
     });
 
     app.post('/init', (req, reply) => {

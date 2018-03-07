@@ -20,6 +20,8 @@ class NanoStore
             console.log("Port 4003 Disconnected: ", reason);
         }));
         this.nano.on("/nanoknob", action((data) => {
+            
+            // TODO: PATLIYOR
             if(historyStore.latestPatterns[data.index] !== undefined){
                 let activePatterns = historyStore.latestPatterns;
                 let selected_param = "#nudge ";

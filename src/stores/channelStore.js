@@ -72,7 +72,11 @@ class ChannelStore
     @action updateAll() {
         _.forEach(_.filter(this.channels, ['scene', sceneStore.active_scene]), (channel, i) => {
             if (channel.gate && pulseStore.pulse.beat % channel.rate === 0) {
-                channel.time += 1;
+                if(channel.loop && channel.time === channel.steps) {
+                    //no loop
+                }
+                else 
+                    channel.time += 1;
                 let current_step = channel.time % channel.steps;
                 if(channel.cells[current_step] !== undefined && channel.cells[current_step] !== ''){
                     if((!this.soloEnabled || (this.soloEnabled && channel.solo)) && !channel.mute)
@@ -125,7 +129,14 @@ class ChannelStore
     @action duplicateChannels(old_scene, new_scene) {
         _.forEach(_.filter(this.channels, ['scene', old_scene]), element => {
             let new_item = _.cloneDeep(element);
-                new_item.scene = new_scene
+            new_item.scene = new_scene;
+            new_item.cells = _.fill(Array(element.steps), '');
+            
+            _.forEach(element.cells, (c, i) => {
+                new_item.cells[i] = _.cloneDeep(c);
+            })
+            console.log(element.cells, new_item.cells);
+
             this.channels.push(new_item);
         });
     }
@@ -193,8 +204,11 @@ class ChannelStore
         }
     }
     
-    @action deleteChannel(name) {
-        this.channels = _.reject(this.channels, { 'name': name, 'scene': sceneStore.active_scene });
+    @action deleteChannel(name, scene = sceneStore.active_scene) {
+        this.channels = _.reject(this.channels, { 'name': name, 'scene': scene });
+    }
+    @action deleteAllChannelsInScene(scene) {
+        this.channels = _.reject(this.channels, { 'scene': scene });
     }
 
     // TOGGLE

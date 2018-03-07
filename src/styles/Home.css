@@ -1,7 +1,7 @@
 .Home {
   background: black;
   overflow: auto;
-  height: 100%;
+  height: calc(100% - 58px);
 }
 
 /*Disable views in specific cases*/
@@ -80,7 +80,12 @@
   color: white;
 }
 .Button:active {
-  background: rgba(255,255,102,0.75);
+  background: rgba(255,255,102,0.55);
+}
+.Button.active {
+  background: rgba(255,255,102,0.55);
+  color: #333;  
+  font-weight: bold;
 }
 .Button:disabled {
   background: #f00;
@@ -179,28 +184,35 @@ div.cm-s-_style.CodeMirror-wrap {
 
 
 /*------------SCENES PANEL------------*/
-.Scenes {
+.ScenesButtons {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%;
+}
+/* @media screen and (max-width: 400px) {
+	.ScenesButtons {
+    display: grid;
+    background: #f00;
+    width: 100%;
+  }
+} */
+
+.ScenesButtons button {
+  width: 100%;
 }
 /*All Scene Items together*/
 .AllScenes {
   margin-top: 10px;
   padding: 1px;
   border: 1px solid #000;
-
-
 }
 /*Scene Items on Scene Panel*/
 .SceneItem {
+  justify-content: space-around;
   border: 1px solid rgba(120, 120, 120, 0.75);
   width: 98%;
   background: none;
-
   margin: 1px;
-}
-
-.SceneName {
-  font-size: 14px !important; 
-  
 }
 /*Active Scene Items on Scene Panel*/
 .SceneItem-active {
@@ -208,6 +220,10 @@ div.cm-s-_style.CodeMirror-wrap {
   width: 98%;
   background: rgba(255,255,102,0.25);
   margin: 1px;
+}
+.SceneName {
+  font-size: 14px;
+  width: 90%;  
 }
 
 
@@ -330,12 +346,12 @@ div.cm-s-_style.CodeMirror-wrap {
   position: fixed;
   display: inline-flex;
   height: 25px;
-  width: calc(100% - 32px);
+  width: calc(100%);
   vertical-align: middle; 
   justify-content: space-between;
   border-bottom: 1px solid rgb(180, 180, 180);
-  border-left: 1px solid rgb(180, 180, 180);
-  border-right: 1px solid rgb(180, 180, 180);
+  /* border-left: 1px solid rgb(180, 180, 180);
+  border-right: 1px solid rgb(180, 180, 180); */
   padding: 0 15px 0 15px;
   font-size: 10px;
 }
@@ -350,6 +366,7 @@ div.cm-s-_style.CodeMirror-wrap {
 }
 .CanvasSketch {
   transform: translate(0, 26px);
+  /* height: calc(100% - 26px); */
 }
 
 

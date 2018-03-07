@@ -11,93 +11,98 @@ import '../styles/Home.css';
 @observer
 export default class Globals extends React.Component {
 
+  executionCss = (event, duration = 500) => {
+    event.persist();
+    let arr = document.getElementsByClassName('global_input');
+    _.each(arr, (e)=>{
+      e.className += ' Executed';
+      _.delay( () => ( e.className = 'Input draggableCancel global_input' ) ,duration);
+    })
+  }
+
   handleUpdatePatterns = (event) => {
-    console.log(event.keyCode);
-    //event.keyCode === 91 && 
-    if(event.keyCode === 13){
+    console.log(event.ctrlKey, event.keyCode);
+    if(event.ctrlKey && event.keyCode === 13){
+      this.executionCss(event);
       this.props.globalStore.updatePatterns();
     }
   }
 
-  handleUpdateGlobals = (index) => {
-    console.log(index);
-    this.props.globalStore.updateGlobals(index);
-    
+  handleUpdateGlobals = (globalObj, index) => {
+    this.props.globalStore.updateGlobals(globalObj, index); 
   }
 
   handleSaveGlobals = () => {
-    this.props.globalStore.saveGlobals();
-    
+    this.props.globalStore.saveGlobals(); 
   }
 
   
   render() {
-  console.log("RENDER GLOBALS.JS");
-  const ctx = this;
-  const maskedInputDurations=  _.repeat("1.1  ", 4);
-  const maskedInputPatterns = "0 | " + _.repeat("1  ", 10);
-  const options = {
-    mode: '_rule',
-    theme: '_style',
-    fixedGutter: true,
-    scroll: false,
-    styleSelectedText:true,
-    showToken:true,
-    lineWrapping: true,
-    showCursorWhenSelecting: true, 
-    readOnly: true
-  };
-  //{_.map(this.props.channelStore.getActiveChannels, this.renderGlobalChanels.bind(this))}
-
-  return (<div className={'Globals PanelAdjuster draggableCancel'}>
-    <div style={{display: 'flex', displayDirection: 'row'}}>
-      <div className={'GlobalParamsInputs'}>
-        <div className={'GlobalChannelInputs'}>
+    console.log("RENDER GLOBALS.JS");
+    const ctx = this;
+    const options = {
+      mode: '_rule',
+      theme: '_style',
+      fixedGutter: true,
+      scroll: false,
+      styleSelectedText:true,
+      showToken:true,
+      lineWrapping: true,
+      showCursorWhenSelecting: true, 
+      readOnly: true
+    };
+    //{_.map(this.props.channelStore.getActiveChannels, this.renderGlobalChanels.bind(this))}
+    
+  return (<div className={'GlobalParams PanelAdjuster'}>
+    <p>Execute: ⌃ + Enter</p>
+    <div className={"GlobalParamsInputsII"}>
+      <div className={"GlobalParamsInputs"}>
+        <div>
           <input ref={(global_channels) => { this.globalChannels = global_channels; }}
-          className={"GlobalChannels-text draggableCancel"}
-          placeholder={"Channels"}  
-          value={this.props.globalStore.getChannels}
-          onChange={() => (this.props.globalStore.updateChannels(this.globalChannels.value))}
-          onClick={() =>  this.globalChannels.focus()} 
-          onKeyUp={this.handleUpdatePatterns.bind(this)}/>
-        </div>
-        <div className={'GlobalTransformer'}>
+            className={"Input draggableCancel global_input"} 
+  
+            value={this.props.globalStore.getChannels}
+            onChange={() => (this.props.globalStore.updateChannels(this.globalChannels.value))}
+            onClick={() =>  this.globalChannels.focus()} 
+            onKeyUp={this.handleUpdatePatterns.bind(this)} 
+            placeholder={"Channels"}/>
+
           <input ref={(global_transformer) => { this.globalTransformer = global_transformer; }}
-            className={"GlobalTransformer-text draggableCancel"}
-            placeholder={"Transformer"}  
+            className={"Input draggableCancel global_input"} 
             value={this.props.globalStore.getTransform}
             onChange={() => (this.props.globalStore.updateTransformer(this.globalTransformer.value))}
             onClick={() =>  this.globalTransformer.focus()} 
+            onKeyUp={this.handleUpdatePatterns.bind(this)}
+            placeholder={"Transformer"}/>
+          <input ref={(global_modifier) => { this.globalModifier = global_modifier; }}
+            className={"Input draggableCancel global_input"} 
+            value={this.props.globalStore.getModifier}
+            onChange={() => (this.props.globalStore.updateModifier(this.globalModifier.value))}
+            onClick={() =>  this.globalModifier.focus()} 
+            onKeyUp={this.handleUpdatePatterns.bind(this)}
+            placeholder={"Modifier"}/>
+          <input ref={(global_param) => { this.globalParam = global_param; }}
+            className={"Input draggableCancel global_input"} 
+            placeholder={"Global Param to be used within patterns"}  
+            value={this.props.globalStore.getParam}
+            onChange={() => (this.props.globalStore.updateParam(this.globalParam.value))}
+            onClick={() =>  this.globalParam.focus()} 
             onKeyUp={this.handleUpdatePatterns.bind(this)}/>
         </div>
-        <div className={'GlobalModifier'}>
-          <input ref={(global_modifier) => { this.globalModifier = global_modifier; }}
-          className={"GlobalModifier-text draggableCancel"}
-          placeholder={"Modifier"}  
-          value={this.props.globalStore.getModifier}
-          onChange={() => (this.props.globalStore.updateModifier(this.globalModifier.value))}
-          onClick={() =>  this.globalModifier.focus()} 
-          onKeyUp={this.handleUpdatePatterns.bind(this)}/>
-        </div>
-      </div>
-      </div>
-      <div style={{display: 'flex', displayDirection: 'column'}}>
-        <div style={{display: 'flex', displayDirection: 'row'}}>
-          <input ref={(global_param) => { this.globalParam = global_param; }}
-              className={"GlobalModifier-text draggableCancel"}
-              placeholder={"Global Param to be used within patterns"}  
-              value={this.props.globalStore.global_mod.param}
-              onChange={() => (this.props.globalStore.updateParam(this.globalParam.value))}
-              onClick={() =>  this.globalParam.focus()} 
-              onKeyUp={this.handleUpdatePatterns.bind(this)}/>
-          <button className={"Button draggableCancel"} onClick={this.handleSaveGlobals.bind(this)}>Save</button>
-          {this.props.globalStore.getGlobals.map((glb, i) => {
-            <button key={i} className={"Button draggableCancel"} onClick={this.handleUpdateGlobals.bind(this,glb)}>{glb}</button>  
-          })}
-          
-        </div>
+        
+        <button className={"Button draggableCancel"} onClick={this.handleSaveGlobals.bind(this)}>Save</button>
       </div>
     </div>
-    )
+    <p>{"(Select) click,  (save) ⇧ + click, (delete) ⌥ + click"}</p>
+    <div className={'StoredGlobalParams'}>
+      {this.props.globalStore.getGlobals.map((glb, i) => {
+        return (<button key={i} 
+          className={"Button"+ (this.props.globalStore.isActive(i) ? " active" : "") +" draggableCancel"} 
+          onClick={this.handleUpdateGlobals.bind(this, glb, i)}>
+            {i}
+        </button>)  
+      })}
+    </div>
+    </div>)
   }
 }      

@@ -50,13 +50,19 @@ class SceneStore
 
     @action deleteScene(name) {
         if(name !== '' && name !== 'default') {
-            this.scene_list = _.remove(this.scene_list, (n) => {
+            // Delete from patterns list
+            patternStore.deleteAllPatternsInScene(name);
+
+            // Delete from channels list
+            channelStore.deleteAllChannelsInScene(name);
+
+            // Delete from scenelist
+            this.scene_list =  _.remove(this.scene_list,  (n) => {
                 return n !== name;
             });
         }
     }
 
-    // TODO: NOT WORKING
     @action duplicateScene(name) {
         if(name !== '') {
             if(_.find(this.scene_list, name) === undefined) {

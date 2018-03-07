@@ -1,1 +1,44 @@
-[{"channels":"","transformer":"","modifier":"","param":""}]
+[
+ {
+  "channels": "",
+  "transformer": "",
+  "modifier": "",
+  "param": ""
+ },
+ {
+  "channels": "0",
+  "transformer": "slow 2 $",
+  "modifier": "#coarse 4",
+  "param": "let gx = 0"
+ },
+ {
+  "channels": "1 2",
+  "transformer": "every 3 (#speed \"-1\") $off 0.5 (#s \"gen2\")$",
+  "modifier": "#end 0.2",
+  "param": "let gx = 0"
+ },
+ {
+  "channels": "1 2",
+  "transformer": "every 3 (#speed \"-1\") $off 0.5 (#lpf 3000)$",
+  "modifier": "#end 0.2 #lpq 0.2",
+  "param": "let gx = 0"
+ },
+ {
+  "channels": "1 2 3",
+  "transformer": "spaceOut[0.2..1]$every 3 (#speed \"-1\") $off 0.5 (#lpf 3000)$",
+  "modifier": "#end 0.2 #lpq 0.2",
+  "param": "let gx = 0"
+ },
+ {
+  "channels": "1 2 3",
+  "transformer": "spaceOut[0.2..1]$",
+  "modifier": "#s \"foil2\" #gain 1.3 #speed 2",
+  "param": "let gx = 0"
+ },
+ {
+  "channels": "1 2 3 4",
+  "transformer": "slow 4 $every 2 (#end 0.2)$",
+  "modifier": "#lpf 1000",
+  "param": ""
+ }
+]

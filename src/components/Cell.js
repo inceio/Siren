@@ -13,14 +13,14 @@ export default class Cell extends React.Component {
 
         
         
-        if(event.ctrlKey && event.keyCode === 13) {
+        if((event.metaKey || event.ctrlKey) && event.keyCode === 13) {
             event.preventDefault();
             timer();
         }
 
         //compile pattern with the parsed parameters + channel props cmd + enter
-        else if(event.keyCode  === 93 && event.keyCode === 13) {
-            this.props.cellStore.compileCell(channel_index, cell_index);
+        else if(event.altKey && event.keyCode === 13) {
+            this.props.cellStore.compileCell();
         }
         else if(event.keyCode === 13) {
             if(!this.props.cellStore.isSelected) {
@@ -38,7 +38,7 @@ export default class Cell extends React.Component {
             event.preventDefault();
         }
         // copy cells
-        else if(event.key === 'c') {
+        else if((event.metaKey || event.ctrlKey) && event.key === 'c') {
             if(this.props.cellStore.isSelected){
                 event.preventDefault();
                 this.props.cellStore.copyCells();
@@ -46,7 +46,7 @@ export default class Cell extends React.Component {
             } 
         }
         // paste cells
-        else if(event.key === 'v') {
+        else if((event.metaKey || event.ctrlKey) && event.key === 'v') {
             if(this.props.cellStore.isSelected) {
                 event.preventDefault();
                 this.props.cellStore.pasteCells();
@@ -87,8 +87,18 @@ export default class Cell extends React.Component {
             if(this.props.cellStore.isSelected) event.preventDefault();
         }
         // global save
-        else if(event.key === 's' && event.ctrlKey) {
+        else if(event.key === 's' && (event.metaKey || event.ctrlKey) ) {
             save();
+            event.preventDefault();
+        }
+        //Delete Cells
+        else if(event.keyCode === 8 && (event.metaKey || event.ctrlKey) ) {
+            this.props.cellStore.deleteSelectedCells();
+            event.preventDefault();
+        }
+        //Cut Cells
+        else if(event.keyCode === 88 && (event.metaKey || event.ctrlKey) ) {
+            this.props.cellStore.cutCells();
             event.preventDefault();
         }
     }

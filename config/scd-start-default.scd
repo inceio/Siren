@@ -1,5 +1,5 @@
 (
-s.options.numInputBusChannels = 6;
+//s.options.numInputBusChannels = 6;
 s.options.numOutputBusChannels = 14;
 s.options.numBuffers = 2048 * 64;
 s.options.maxNodes = 1024 * 32;
@@ -26,7 +26,7 @@ s.waitForBoot {
   "/Users/canince/documents/git/Siren/deps/SynthDefs/customsynth.scd".load;
   //"/Users/canince/Documents/git/Siren/deps/SynthDefs/dx7/DX7MIDI.scd".load;
   //"DX7 MIDI LOADED".postln;
-  //"/Users/canince/documents/git/Siren/deps/SynthDefs/sdmidi.scd".load;
+  "/Users/canince/documents/git/Siren/deps/SynthDefs/sdmidi.scd".load;
   "SD MIDI LOADED".postln;
 
   0.2.wait;
@@ -37,7 +37,7 @@ s.waitForBoot {
 
   //~d1 = ~dirt.orbits[0];
 
-  OSCFunc.trace(true);
+  OSCFunc.trace(false);
   s.sendMsg("/notify", 1);
   };
 

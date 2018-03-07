@@ -7,7 +7,7 @@ import historyStore from './historyStore';
 class GlobalStore 
 {
     @observable global_mod = [{channels : '',
-                              transformer : '',
+                               transformer : '',
                                modifier : '',
                                param:''
                              }]
@@ -16,26 +16,34 @@ class GlobalStore
     @observable global_transformer = ''
     @observable global_modifier = ''
     @observable global_param = ''
+    
     @observable active_index = 0;
 
-    
     constructor() {
-       //this.load();
-      }
-
-    @action updateGlobals(index){
-        this.global_channels = this.global_mod[index].channels;
-        this.global_transformer = this.global_mod[index].transformer;
-        this.global_modifier = this.global_mod[index].modifier;
-        this.global_param = this.global_mod[index].param;
-        console.log(index);
-        console.log(this.global_mod[index].channels);
+        this.load();
     }
 
+    // getters
+    @computed get getGlobals(){
+        return this.global_mod;   
+    }
+    @computed get getChannels(){
+        return this.global_channels;   
+    }
+    @computed get getTransform(){
+        return this.global_transformer;   
+    }
+    @computed get getModifier(){
+        return this.global_modifier;   
+    }
+    @computed get getParam(){
+        return this.global_param;   
+    }
+
+    // setters
     @action updateTransformer(transformer){
         this.global_transformer = transformer;
     }
-
     @action updateModifier(modifier){
         this.global_modifier = modifier;
     }
@@ -46,50 +54,38 @@ class GlobalStore
         this.global_channels  = channels;
     }
 
-    @action saveGlobals(){
-        let gobj = {channels: this.global_channels,
-                    transform: this.global_transform,
-                    modifier:this.global_modifier,
-                    param:this.global_param,
-                    };
-        this.global_mod.push(gobj);
-        console.log("Saved Array", this.global_mod);
-        this.save();
+    // @action loadGlobals(index){
+    //     this.active_index = index;
+    //     this.global_channels = this.global_mod[index].channels;
+    //     this.global_transformer = this.global_mod[index].transformer;
+    //     this.global_modifier = this.global_mod[index].modifier;
+    //     this.global_param = this.global_mod[index].param;
+    // }
+    @action updateGlobals(globalObj, index){
+        if(globalObj !== undefined) {
+            this.active_index = index;
+            this.global_channels = globalObj.channels;
+            this.global_transformer = globalObj.transformer;
+            this.global_modifier = globalObj.modifier;
+            this.global_param = globalObj.param;
+        }
     }
 
-    @action overwriteGlobals(index){
-        this.global_mod[index].channels = this.global_mod.channels;
-        this.global_mod[index].transformer = this.global_mod.transformer;
-        this.global_mod[index].modifier = this.global_mod.modifier;
-        this.global_mod[index].param = this.global_mod.param;
-    }
-
-    @action loadGlobals(index){
-        this.active_index = index;
-        this.global_channels = this.global_mod[index].channels;
-        this.global_transformer = this.global_mod[index].transformer;
-        this.global_modifier = this.global_mod[index].modifier;
-        this.global_param = this.global_mod[index].param;
-    }
     isActive(globalindex){
         return this.active_index === globalindex;
     }
-    
-    @computed get getGlobals(){
-        return this.global_mod;   
+
+    @action saveGlobals(){
+        let gobj = {channels: this.global_channels,
+                    transformer: this.global_transformer,
+                    modifier: this.global_modifier,
+                    param: this.global_param,
+                    };
+        this.global_mod.push(gobj);
+        this.active_index = this.global_mod.length - 1;
+        this.save();
     }
-    @computed get getChannels(){
-        return this.global_channels;   
-    }
-    @computed get getTransform(){
-        return this.global_transform;   
-    }
-    @computed get getModifier(){
-        return this.global_modifier;   
-    }
-    @computed get getParam(){
-        return this.global_param;   
-    }
+
     @action updatePatterns() {
 
         const ctx = this;
@@ -99,17 +95,18 @@ class GlobalStore
         let modifier = this.global_modifier;
         let gbchan = channels.split(" ");
 
-        console.log("UPDATE PATTERNS:", channels, transformer, modifier);
-
-        if (gbchan !== undefined && gbchan.length > 0){
-            let activePatternsLen =  historyStore.latestPatterns.length - 1 ;
-            let activePatterns =  historyStore.latestPatterns;
+        let activePatternsLen =  historyStore.latestPatterns.length - 1 ;
+        let activePatterns =  historyStore.latestPatterns;
+        
+        console.log("GLOBAL UPDATE PATTERNS:", channels, transformer, modifier,activePatterns,activePatternsLen);
+        if (gbchan !== undefined && gbchan.length > 0 && activePatterns !== undefined && activePatternsLen > 0){
             if (gbchan === undefined ||gbchan[0] === undefined || gbchan[0] === ' ' || gbchan[0] ==='0' ){
                 console.log("Global All channels");
                 for (let i = 0; i < activePatternsLen; i++) {
-                    if(activePatterns[i][activePatternsLen] !== undefined && activePatterns[i][activePatternsLen].pattern !== ''){
-                        let patternbody = activePatterns[i][activePatternsLen].pattern.substring(_.indexOf(activePatterns[i][activePatternsLen].pattern, "$")+1);
-                        let patname = activePatterns[i][activePatternsLen].pattern.substring(0,_.indexOf(activePatterns[i][activePatternsLen].pattern, "$")+1 );
+                    if(activePatterns[i][0] !== undefined && activePatterns[i][0].pattern !== ''){
+                        console.log("HERE");
+                        let patternbody = activePatterns[i][0].pattern.substring(_.indexOf(activePatterns[i][0].pattern, "$")+1);
+                        let patname = activePatterns[i][0].pattern.substring(0,_.indexOf(activePatterns[i][0].pattern, "$")+1 );
                         let pattern = patname + transformer + patternbody + modifier;
                         console.log(pattern);
                         ctx.submitGHC(pattern);
@@ -119,17 +116,15 @@ class GlobalStore
             else {
                 _.forEach( gbchan, function(chan, j){
                     if(chan !== undefined){
-                        let i = parseInt(chan, 10) - 1;
-                        if(i!== undefined){
-                            console.log("Global individual channel");
-                            if(activePatterns[j][activePatternsLen] !== -1 && activePatterns[j][activePatternsLen].pattern !== ''){
-                                let patternbody = activePatterns[j][activePatternsLen].pattern.substring(_.indexOf(activePatterns[j][activePatternsLen].pattern, "$")+1);
-                                let patname = activePatterns[j][activePatternsLen].pattern.substring(0,_.indexOf(activePatterns[j][activePatternsLen].pattern, "$")+1 );
+                        console.log("Global individual channel");
+                        if(activePatterns[j][0] !== undefined){
+                            if(activePatterns[j][0].pattern.text !== ''){
+                                let patternbody = activePatterns[j][0].pattern.substring(_.indexOf(activePatterns[j][0].pattern, "$")+1);
+                                let patname = activePatterns[j][0].pattern.substring(0,_.indexOf(activePatterns[j][0].pattern, "$")+1 );
                                 let pattern = patname + transformer + patternbody + modifier;
                                 console.log(pattern);
                                 ctx.submitGHC(pattern);
                             }
-                        
                         }
                     }       
                 });
@@ -150,16 +145,16 @@ class GlobalStore
     load() {
         request.get('http://localhost:3001/globals_load')
               .then(action((response) => { 
-                if ( response.data.global_mod !== undefined) {
-                    this.global_mod    = response.data.global_mod;
-                    console.log(" ## Globals loaded: ",this.global_mod);
+                if ( response.data.globals !== undefined) {
+                    this.global_mod = response.data.globals;
+                    console.log(" ## Globals loaded: ", this.globals);
                 }
               })).catch(function (error) {
                     console.error(" ## GlobalStore errors: ", error);
               });
       };
       
-      save() {
+    save() {
         request.post('http://localhost:3001/globals_save', { 'globals':    this.global_mod})
                 .then((response) => {
                     console.log(" ## Globals Saved");

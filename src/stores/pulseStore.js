@@ -3,7 +3,6 @@ import { observable, action, computed } from 'mobx';
 import io from 'socket.io-client';
 
 import channelStore from './channelStore'
-import menubarStore from './menubarStore'
 
 // nodejs connections
 import request from '../utils/request'
@@ -21,13 +20,11 @@ class PulseStore
         const ctx = this;
         this.link_pulse.on('connect', (reason) => {
             console.log("Port 4001 Connected: ", reason);
-            menubarStore.server_info = 2;
         });
         this.link_pulse.on('disconnect', action((reason) => {
             console.log("Port 4001 Disconnected: ", reason);
             
             ctx.setActive(false);
-            menubarStore.server_info = 0;
         }));
         this.link_pulse.on("pulse", data => {
 

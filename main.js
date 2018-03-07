@@ -8,9 +8,9 @@ function createWindow() {
     // Initialize the window to our specified dimensions
     mainWindow = new BrowserWindow({
         
-        backgroundColor: '#312450',
+        backgroundColor: '#000',
         show: true,
-        icon: 'favicon.icns',
+        icon: __dirname +'/favicon.icns',
         setMenu: null
     })
     mainWindow.setMenu(null);
@@ -20,7 +20,7 @@ function createWindow() {
 
     // Show dev tools
     // Remove this line before distributing
-    mainWindow.webContents.openDevTools()
+    //mainWindow.webContents.openDevTools()
 
     // Remove window once app is closed
     mainWindow.on('closed', function () {

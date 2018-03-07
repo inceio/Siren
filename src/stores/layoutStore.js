@@ -9,8 +9,10 @@ class LayoutStore
   isLoading;
   @observable layouts;
   @observable customs;
+
   constructor() {
     this.layouts = [];
+    this.customs = [[], [], [], []];
     this.isLoading = true;
     this.load();
   }
@@ -21,14 +23,22 @@ class LayoutStore
   @action hideLayout(specifier) {
     this.layouts.forEach(l => {if(l.i === specifier) l.isVisible = false;});
   };
-  @action loadCustom(layouts) {
-    
+
+  isSlotEmpty(i) { 
+    return this.customs[i] !== undefined && this.customs[i].length === 0;
+  }
+  @action loadCustom(i) {
+    if (this.customs[i]) { 
+      this.layouts = this.customs[i];
+    }
   };
-  @action saveCustom(layouts) {
-    
+  @action saveCustom(i) {
+    this.customs[i] = this.layouts;
+    this.save();
   };
-  @action overrideCustom(layouts) {
-    
+  @action deleteCustom(i) {
+    if (this.customs[i])
+      this.customs[i] = [];
   };
   
   @computed get visibleLayouts() {
@@ -37,9 +47,10 @@ class LayoutStore
   @computed get allLayouts() {
     return this.layouts;
   };
+
   @action gridParameters(specifier) {
     let item = this.layouts.filter(l => l.i === specifier)[0];
-    return {x: item.x, y: item.y, h: item.h, w: item.w, minW: item.minW, isVisible: item.isVisible}
+    return {x: item.x, y: item.y, h: item.h, w: item.w, isVisible: item.isVisible}
   };
 
   @action onLayoutChange(layout) {
@@ -57,41 +68,17 @@ class LayoutStore
     }
   };
 
-  @action matrixFullscreen() {
-    
-    if(this.layouts !== undefined) {
-      let found = false;
-      _.forEach(this.layouts, function(item, i) {
-        if (item.i === 'matrix') {
-          this.layouts[i].y = 0;
-          this.layouts[i].x = 0;
-          this.layouts[i].w = 24;
-          this.layouts[i].h = 20;
-          this.layouts[i].isVisible = true;
-          found = true;
-        }
-        else {
-          this.layouts[i].isVisible = false;
-        }
-      });
-
-      if (!found) {
-        this.layouts = _.concat(this.layouts, {i: 'matrix', x: 0, y: 0, w: 24, h: 20, minW: 5, isVisible: true});
-      }
-    }
-  }
-
   load() {
-
-    //load customs
+    //load layouts
     const ctx = this;
     console.log(" ## LOADING LAYOUTS...");
     ctx.isLoading = true;
     request.get('http://localhost:3001/layouts')
           .then(action((response) => { 
-            if ( response.data.layouts ) {
+            if ( response.data.layouts && response.data.customs ) {
               ctx.layouts = response.data.layouts;
-              console.log(" ## Layouts loaded: ", this.layouts);
+              ctx.customs = response.data.customs;
+              console.log(" ## Layouts loaded: ", this.layouts, this.customs);
             }
             ctx.isLoading = false;
           })).catch(function (error) {
@@ -101,8 +88,8 @@ class LayoutStore
   };
 
   save() {
-    //save customs
-    request.post('http://localhost:3001/layouts', { 'layouts': this.layouts })
+    //save layouts
+    request.post('http://localhost:3001/layouts', { 'layouts': this.layouts, 'customs': this.customs })
           .then((response) => {
             if (response.status === 200) console.log(" ## Layout saved.");
             else                         console.log(" ## Layout save failed.");
@@ -112,16 +99,39 @@ class LayoutStore
   };
 
   @action reset() {
-    this.layouts = [{i: "scenes", x: 0, y: 0, w: 3, h: 20, minW: 3, isVisible: true},
-                    {i: 'matrix', x: 3, y: 0, w: 13, h: 13, minW: 5, isVisible: true},
-                    {i: 'patterns', x: 16, y: 0, w: 8, h: 20, minW: 3, isVisible: true},
-                    {i: 'pattern_history', x: 3, y: 13, w: 13, h: 3, minW: 3, isVisible: true},
-                    {i: 'globals', x: 6, y: 16, w: 5, h: 4, minW: 4, isVisible: false},
-                    {i: 'console', x: 11, y: 16, w: 5, h: 4, minW: 2, isVisible: true},
-                    {i: 'debugconsole', x: 8, y: 21, w: 7, h: 13, minW: 7, isVisible: true},
-                    {i: 'paths', x: 0, y: 21, w: 7, h: 13, minW: 7, isVisible: true},
-                    {i: 'canvas', x: 0, y: 21, w: 7, h: 13, minW: 7, isVisible: true}];
+    this.layouts = [{i: "scenes", x: 0, y: 0, w: 3, h: 20, isVisible: true},
+                    {i: 'matrix', x: 3, y: 0, w: 13, h: 13, isVisible: true},
+                    {i: 'patterns', x: 16, y: 0, w: 8, h: 20, isVisible: true},
+                    {i: 'pattern_history', x: 3, y: 13, w: 13, h: 3, isVisible: true},
+                    {i: 'globals', x: 6, y: 16, w: 5, h: 4, isVisible: false},
+                    {i: 'console', x: 11, y: 16, w: 5, h: 4, isVisible: true},
+                    {i: 'debugconsole', x: 8, y: 21, w: 7, h: 13, isVisible: true},
+                    {i: 'paths', x: 0, y: 21, w: 7, h: 13, isVisible: true},
+                    {i: 'canvas', x: 0, y: 21, w: 7, h: 13, isVisible: true}];
   };
+
+  @action matrixFullscreen() {
+    if(this.layouts !== undefined) {
+      let found = false;
+      _.forEach(this.layouts, (item, i) => {
+        if (item.i === 'matrix') {
+          item.x = 0;
+          item.y = 0;
+          item.w = 24;
+          item.h = 20;
+          item.isVisible = true;
+          found = true;
+        }
+        else {
+          item.isVisible = false;
+        }
+      });
+
+      if (!found) {
+        this.layouts = _.concat(this.layouts, {i: 'matrix', x: 0, y: 0, w: 24, h: 20, isVisible: true});
+      }
+    }
+  }
 }
 
 export default new LayoutStore();

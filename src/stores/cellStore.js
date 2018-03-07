@@ -21,8 +21,11 @@ class CellStore
         this.select_state = flag;
     }
 
-    compileCell(channel_i,cell_i){
-        channelStore.sendPattern(channelStore.channels[channel_i], channelStore.channels[channel_i].cells[cell_i]);
+    compileCell(){
+        let channel_i = this.current_cell[0];
+        let cell_i = this.current_cell[1];
+        if(this.select_state)
+        channelStore.sendPattern(channelStore.getActiveChannels[channel_i], channelStore.getActiveChannels[channel_i].cells[cell_i]);
     }
 
     isCellSelected(channel_i, cell_i) {
@@ -44,8 +47,14 @@ class CellStore
         return false;
     }
 
+    @action cutCells(){
+        console.log("Cut2");
+        this.copyCells();
+        this.deleteSelectedCells();
+
+    }
     copyCells() {
-        
+        console.log("Cut3");
         if(this.select_state) {
             this.clipboard = [];
 
@@ -69,6 +78,22 @@ class CellStore
                                        this.clipboard[i].value);
         }
     }
+    @action deleteSelectedCells(){
+        if(this.select_state) {
+
+            let min_channel = _.min([this.init_selection_cell[0], this.last_selection_cell[0]]);
+            let min_cell    = _.min([this.init_selection_cell[1], this.last_selection_cell[1]]);
+            let max_channel = _.max([this.init_selection_cell[0], this.last_selection_cell[0]]);
+            let max_cell    = _.max([this.init_selection_cell[1], this.last_selection_cell[1]]);
+
+
+            for (let i = 0; i <= max_channel-min_channel; i++)
+                for (let j = 0; j <= max_cell-min_cell; j++)
+                channelStore.getActiveChannels[i+min_channel].cells[j+min_cell] = '';
+            
+            }
+    }
+
 
     @action selectCell(channel_i, cell_i) {
         if (channel_i < 0 || channel_i >= channelStore.getActiveChannels.length ||
@@ -146,14 +171,14 @@ class CellStore
 
     //////////////////////////////
     @action updateCell(channel, cell_index, cell_value) {
-        let ch = _.find(channelStore.channels, { 'name': channel, 'scene': sceneStore.active_scene });
+        let ch = _.find(channelStore.getActiveChannels, { 'name': channel, 'scene': sceneStore.active_scene });
         if(ch !== undefined) {
             ch.cells[cell_index] = cell_value;
         }
     }
 
     isCellActive(channel, index) {
-        let ch = _.find(channelStore.channels, { 'name': channel, 'scene': sceneStore.active_scene });
+        let ch = _.find(channelStore.getActiveChannels, { 'name': channel, 'scene': sceneStore.active_scene });
         if(ch !== undefined) {
             return ch.time % ch.steps === index;
         }

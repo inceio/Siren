@@ -23,6 +23,7 @@ import historyStore from './stores/historyStore';
 import globalStore from './stores/globalStore';
 import cellStore from './stores/cellStore';
 import nanoStore from './stores/nanoStore';
+import debugStore from './stores/debugStore';
 
 
 const stores = {
@@ -38,7 +39,8 @@ const stores = {
   historyStore,
   globalStore,
   cellStore,
-  nanoStore
+  nanoStore,
+  debugStore
 };
 
 // For easier debugging
