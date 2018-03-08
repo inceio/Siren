@@ -72,11 +72,11 @@ class ChannelStore
     @action updateAll() {
         _.forEach(_.filter(this.channels, ['scene', sceneStore.active_scene]), (channel, i) => {
             if (channel.gate && pulseStore.pulse.beat % channel.rate === 0) {
-                if(channel.loop && channel.time === channel.steps) {
-                    //no loop
-                }
-                else 
-                    channel.time += 1;
+                // if(channel.loop && channel.time === channel.steps) {
+                //     //no loop
+                // }
+                // else 
+                channel.time += 1;
                 let current_step = channel.time % channel.steps;
                 if(channel.cells[current_step] !== undefined && channel.cells[current_step] !== ''){
                     if((!this.soloEnabled || (this.soloEnabled && channel.solo)) && !channel.mute)

@@ -101,7 +101,7 @@ export default class Patterns extends React.Component {
                 </button>
                 </div>
 
-                {_.map(this.props.patternStore.patterns.filter(l => l.scene === this.props.sceneStore.activeScene), 
+                {_.map(this.props.patternStore.activePatterns, 
                        this.renderItem.bind(this))}
             </div>);
     }

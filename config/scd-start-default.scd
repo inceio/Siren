@@ -1,5 +1,6 @@
 (
 //s.options.numInputBusChannels = 6;
+s.options.numInputBusChannels = 0;
 s.options.numOutputBusChannels = 14;
 s.options.numBuffers = 2048 * 64;
 s.options.maxNodes = 1024 * 32;
@@ -19,7 +20,7 @@ s.waitForBoot {
   s.makeGui;
   s.meter;
   s.scope;
-  s.latency = 0.35;
+  s.latency = 0.3;
   
   //"/Users/canince/documents/git/Siren/deps/SynthDefs/custominputs.scd".load;
   "/Users/canince/documents/git/Siren/deps/SynthDefs/customfx.scd".load;
@@ -37,7 +38,7 @@ s.waitForBoot {
 
   //~d1 = ~dirt.orbits[0];
 
-  OSCFunc.trace(false);
+  OSCFunc.trace(true);
   s.sendMsg("/notify", 1);
   };
 

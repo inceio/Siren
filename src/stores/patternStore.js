@@ -1,8 +1,9 @@
-import { observable, action } from 'mobx';
+import { observable, action,computed } from 'mobx';
 import _ from 'lodash';
 
 // nodejs connections
 // import request from '../utils/request'
+import sceneStore from './sceneStore'
 
 class PatternStore 
 {
@@ -50,7 +51,6 @@ class PatternStore
             item.params = matches.toString();
         }
     }
-
     @action addPattern(name, active_scene) {
         if(_.find(this.patterns, { 'name': name, 'scene': active_scene }) === undefined) {
             this.patterns.push({
@@ -70,6 +70,10 @@ class PatternStore
     }
     @action deleteAllPatternsInScene(scene) {
         this.patterns = _.reject(this.patterns, { 'scene': scene });
+    }
+
+    @computed get activePatterns(){
+        return this.patterns.filter(c => c.scene === sceneStore.active_scene);
     }
 }
 

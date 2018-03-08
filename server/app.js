@@ -450,7 +450,7 @@ const Siren = () => {
         else if(pat !== undefined && pat !== null && pat !== "" && v !== ""){
           let cellItem = _.slice(getParameters(v), 1);
           newCommand = pat.text;
-
+          
           // Applies parameters
           if(pat.params !== '')
             newCommand = processParameters(_.concat( _.split(pat.params, ','),'t'), newCommand, cellItem);
@@ -485,9 +485,21 @@ const Siren = () => {
               transitionHolder = k + " $ ";
             }
             if (global_mod.channels.includes(channel.cid.toString()) || global_mod.channels.includes(0)){
-                newCommand = global_mod.transform + newCommand + global_mod.modifier;
-              }
+              newCommand = global_mod.transform + newCommand + global_mod.modifier;
+            }
             pattern = transitionHolder + newCommand;
+            tidalPatternQueue.push(pattern);
+            reply.status(200).json({pattern: pattern, cid: channel.cid, timestamp: new Date().getMilliseconds()});
+          }
+          else if(channel.type === "TidalV"){
+            let chn = channel.name.substring(1,channel.name.length);
+            transitionHolder = "x"+ chn + " $ ";
+            pattern = transitionHolder + newCommand;
+            tidalPatternQueue.push(pattern);
+            reply.status(200).json({pattern: pattern, cid: channel.cid, timestamp: new Date().getMilliseconds()});
+          }
+          else if(channel.type === ''){
+            pattern = newCommand;
             tidalPatternQueue.push(pattern);
             reply.status(200).json({pattern: pattern, cid: channel.cid, timestamp: new Date().getMilliseconds()});
           }
