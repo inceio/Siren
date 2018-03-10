@@ -91,8 +91,9 @@ class ChannelStore
                     modifier:globalStore.global_modifier,
                     param: globalStore.global_param
         }
+        let patobj = patternStore.activePatterns;
         request.post('http://localhost:3001/patternstream', {  'step': step, 
-                                                                'patterns': patternStore.patterns,
+                                                                'patterns': patobj,
                                                                 'channel': channel,
                                                                 'global_mod': globoj })
         .then((response) => {

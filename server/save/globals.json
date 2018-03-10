@@ -40,5 +40,11 @@
   "transformer": "slow 4 $every 2 (#end 0.2)$",
   "modifier": "#lpf 1000",
   "param": ""
+ },
+ {
+  "channels": "0",
+  "transformer": "off 0.5 (#speed 2)$",
+  "modifier": "#s \"bass2\" #cut 2",
+  "param": ""
  }
 ]

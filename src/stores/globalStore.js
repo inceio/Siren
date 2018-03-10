@@ -115,7 +115,7 @@ class GlobalStore
             }
             else {
                 _.forEach( gbchan, function(chan, j){
-                    if(chan !== undefined){
+                    if(chan !== undefined && activePatterns[j] !== undefined){
                         console.log("Global individual channel");
                         if(activePatterns[j][0] !== undefined){
                             if(activePatterns[j][0].pattern.text !== ''){
@@ -130,6 +130,7 @@ class GlobalStore
                 });
             }
         }
+        if(this.global_param!== undefined) ctx.submitGHC(this.global_param);
     }
 
     submitGHC(expression) {

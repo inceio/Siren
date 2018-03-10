@@ -18,7 +18,7 @@ export default class DebugConsole extends React.Component {
         return (<div>
           {message
           }
-       SADASASDASDA </div>)
+        </div>)
       }
     
 }

@@ -3,9 +3,11 @@
   "default",
   "1m18",
   "3m81",
-  "6m18"
+  "6m18",
+  "8_9_10m18",
+  "nnnstre"
  ],
- "active_s": "6m18",
+ "active_s": "nnnstre",
  "patterns": [
   {
    "scene": "default",
@@ -186,6 +188,90 @@
    "name": "gen2",
    "params": "x",
    "text": "nToOrbit$ `x` $ every 10 ((#n \"{0 2 ~ 1 1*2 }%5\" ).(rev)) $every 9 (#n \"{~ 1 [2? 1] 0 [2 0] }%5\" ) $n \"{0 ~ 1 <~ 0> 0 <1 ~> <1 [1  1] 1 1 >}%5\" #s \"gen14\" #speed \"1\" #shape \"0.2 0.35\" #comp 0.5 #room 0.1 #gain 1.3 #end 0.`t`"
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "s",
+   "params": "",
+   "text": "silence"
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "pto",
+   "params": "y,z",
+   "text": "nToOrbit $ `y` $ n \"{<0 <~ [~ 0] <2*3? ~> > > < ~ [0 2]> 1 < [~ 1] <2 1 1 >>, <~ 3> <~ 3> 2 <~ <3 ~ 3*2>>}%3\" #s \"gen`z`\" #comp 0.5 #rect 0.5"
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "pat",
+   "params": "y",
+   "text": "nToOrbit $ n  \"{<0 <~ [~ 0] <2*3? ~> > > < ~ [0 2]> 1 < [~ 1] 2> ,3 3 2 <~ 3>}%3\" #s \"`y`\" #comp 0.5 #shape 0.6 #fmf 140 #fm 0.25  #coarse 3 #lpf (scalex 3300 4300 $ sine) #lpq 0.24"
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "acd",
+   "params": "",
+   "text": "slow \"4\" $ n (scaleP \"minor\" $ c2p' \"{c2 ~ ~ c3 ~ f2 f3 ~ ds2 ~ ds2 ~ d2 ~ g2 as2}%8\" ((scale (0) (-3) $ sine ) * (scale (-2) (-2) $ sine * 2))) # sound \"ice\" #sustain 5 #gain 1.4"
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "nor",
+   "params": "x",
+   "text": "every 8 (rev)$ n (scaleP \"minor\" $ c2p' \"{`x`}%5\" ((scale (-3) (-2) $ sine ) * (scale (-4) (1) $ tri))) # s \"ice\" #orbit 5 #legato 1"
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "hat",
+   "params": "",
+   "text": "spaceOut[1] $n \"{4*2 < [4 3]>}%4\"  #s \"gen5\" #orbit 3 #gain 1.2 #end 0.5 #delay 0.3"
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "fil",
+   "params": "",
+   "text": "sometimes (trunc 0.5) $ slow 2 $ n \"{~ <0 1 2 3> ~ <~ 4> ~}%5\" #s \"foil3\" #orbit 6 #gain 1.2 #vowel \"a u\"  #room 0.2 #attack 0.02 #"
+  },
+  {
+   "scene": "nnnstre",
+   "name": "s",
+   "params": "",
+   "text": "silence"
+  },
+  {
+   "scene": "nnnstre",
+   "name": "nord",
+   "params": "y",
+   "text": "slow &(`t`/12)%12& $n (scaleP \"minor\" $ c2p' \"`y`\" ((scale ( &(`t`/120)%12&) &-`t`12%12& $ sine1) * (sine1*2))) #s \"nord2\" #legato &(`t`)%12&"
+  },
+  {
+   "scene": "nnnstre",
+   "name": "pat",
+   "params": "",
+   "text": ""
+  },
+  {
+   "scene": "nnnstre",
+   "name": "hat",
+   "params": "",
+   "text": "slow 1.5 $ n \" {3*3 3 ~ 4}%4\" #s\"gen5\" #end 0.2 "
+  },
+  {
+   "scene": "nnnstre",
+   "name": "nor2",
+   "params": "",
+   "text": "slow 4 $n (scaleP \"minor\" $ c2p' \"[g3 gs3 f3] \" ((scale (-12) 5 $ sine1) * (sine1))) #s \"nord2\" #legato 8"
+  },
+  {
+   "scene": "nnnstre",
+   "name": "gabb",
+   "params": "",
+   "text": "slow (3.5/3) $ off 0.5 (#speed\"&(`t`/120)%12&\")$ nToOrbit $ n \"{0 ~ <~ 1?> 1 ~ <[<2 2 2*2 2> 3 ~ ] 1>}%3 \" #s \"gen4\"  #rect 0.5 #comp 0.5"
+  },
+  {
+   "scene": "nnnstre",
+   "name": "flut",
+   "params": "x",
+   "text": "slow (3.5/3) $ every 6 (#speed \"0.`t`\")$ n (run 5) #s \"flut`x`\" #end 0.2 #orbit 3 #gain 1.2"
   }
  ],
  "channels": [
@@ -693,7 +779,7 @@
    "type": "Tidal",
    "steps": 12,
    "rate": 4,
-   "time": 0,
+   "time": 11,
    "transition": "",
    "cells": [
     "",
@@ -723,7 +809,7 @@
    "type": "Tidal",
    "steps": 12,
    "rate": 4,
-   "time": 0,
+   "time": 11,
    "transition": "",
    "cells": [
     "",
@@ -783,7 +869,7 @@
    "type": "Tidal",
    "steps": 12,
    "rate": 2,
-   "time": 10,
+   "time": 34,
    "transition": "",
    "cells": [
     "",
@@ -806,6 +892,264 @@
    "executed": false,
    "selected": false,
    "cid": 16
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "d1",
+   "type": "Tidal",
+   "steps": 14,
+   "rate": 2,
+   "time": 81,
+   "transition": "(clutchIn 4)",
+   "cells": [
+    "",
+    "",
+    "pto `trunc 0.5`",
+    "",
+    "",
+    "",
+    "pto `trunc 1` `2`",
+    "",
+    "pto `trunc 1` `3`",
+    "s",
+    "pto `slow 3 $ cap 0.2 0.3` ` `6`",
+    "pto `trunc 0.5 $ slow 1` `8`",
+    "pto `juxBy 0.1(#s \"foil2\") $ slow 1` `6`",
+    "pto `slow 3 $ cap 0.2 0.3` ` `6`"
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 21
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "d2",
+   "type": "Tidal",
+   "steps": 14,
+   "rate": 1,
+   "time": 154,
+   "transition": "(clutchIn 4)",
+   "cells": [
+    "",
+    "",
+    "hat",
+    "",
+    "",
+    "s",
+    "pat `gen8`",
+    "",
+    "s",
+    "pat `gen3`",
+    "",
+    "",
+    "",
+    ""
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 22
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "d3",
+   "type": "Tidal",
+   "steps": 14,
+   "rate": 2,
+   "time": 81,
+   "transition": "(clutchIn 4)",
+   "cells": [
+    "",
+    "",
+    "nor `x ~ ~ ~ ~`",
+    "nor `x ~ ~`",
+    "",
+    "",
+    "nor `x ~ ~`",
+    "nor `x*7 ~ x*2 [x x]`",
+    "nor `x ~ ~`",
+    "nor `x*7 ~ x*2 [x x]`",
+    "nor `~ x ~ x ~ [x x]`",
+    "nor `~ x ~ x*3 ~ [x x] `",
+    "nor `~ x ~ x*3 ~ [x x] ~`",
+    "nor `x*5 ~ [x x]`"
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 23
+  },
+  {
+   "scene": "8_9_10m18",
+   "name": "d4",
+   "type": "Tidal",
+   "steps": 14,
+   "rate": 2,
+   "time": 81,
+   "transition": "(clutchIn 4)",
+   "cells": [
+    "",
+    "",
+    "fil",
+    "",
+    "",
+    "",
+    "",
+    "hat",
+    "",
+    "",
+    "fil",
+    "",
+    "",
+    ""
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 24
+  },
+  {
+   "scene": "nnnstre",
+   "name": "d1",
+   "type": "Tidal",
+   "steps": 8,
+   "rate": 2,
+   "time": 106,
+   "transition": "(clutchIn 2)",
+   "cells": [
+    "nord `{~ [x x] x ~}%5`",
+    "nor2",
+    "",
+    "",
+    "nord `[x x] x ~`",
+    "",
+    "nord `{~ [x x] x ~}%5`",
+    "nord `{~ [x x] x ~}%5`"
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 25
+  },
+  {
+   "scene": "nnnstre",
+   "name": "d2",
+   "type": "Tidal",
+   "steps": 8,
+   "rate": 2,
+   "time": 105,
+   "transition": "(clutchIn 2)",
+   "cells": [
+    "",
+    "gabb",
+    "",
+    "gabb",
+    "gabb",
+    "gabb",
+    "gabb",
+    "gabb"
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 26
+  },
+  {
+   "scene": "nnnstre",
+   "name": "d3",
+   "type": "Tidal",
+   "steps": 8,
+   "rate": 8,
+   "time": 18,
+   "transition": "",
+   "cells": [
+    "",
+    "",
+    "hat",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 27
+  },
+  {
+   "scene": "nnnstre",
+   "name": "d4",
+   "type": "Tidal",
+   "steps": 8,
+   "rate": 8,
+   "time": 15,
+   "transition": "(anticipateIn 8)",
+   "cells": [
+    "",
+    "flut  `3`",
+    "flut  `3`",
+    "flut  `2`",
+    "flut  `1`",
+    "flut  `0`",
+    "",
+    "flut  `3`"
+   ],
+   "gate": true,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 28
+  },
+  {
+   "scene": "nnnstre",
+   "name": "d5",
+   "type": "Tidal",
+   "steps": 8,
+   "rate": 8,
+   "time": 0,
+   "transition": "",
+   "cells": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ],
+   "gate": false,
+   "solo": false,
+   "mute": false,
+   "loop": true,
+   "executed": false,
+   "selected": false,
+   "cid": 29
   }
  ]
 }

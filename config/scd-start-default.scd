@@ -32,8 +32,7 @@ s.waitForBoot {
 
   0.2.wait;
   "SIREN LOADED".postln;
-  
-  s.volume = -12;
+
   SuperDirt.default = ~dirt;
 
   //~d1 = ~dirt.orbits[0];
