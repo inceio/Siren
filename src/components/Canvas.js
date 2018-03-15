@@ -58,12 +58,12 @@ export default class Canvas extends React.Component {
         
     return (<div className={"Canvas draggableCancel"}>
       <div className={'CanvasControls'}>
-        <div>Cycles:
+        <div>Cycles: 
           <input className={'Input'}
             placeholder={8}
             onChange={(e) => {this.props.rollStore.updateCycles(_.toInteger(e.target.value))}}/>
         </div>
-        <div>Resolution:
+        <div>Resolution: 
           <input className={'Input'} 
             placeholder={12} 
             onChange={(e) => {this.props.rollStore.updateResolution(_.toInteger(e.target.value))}}/>

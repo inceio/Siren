@@ -2,9 +2,9 @@
  "layouts": [
   {
    "w": 16,
-   "h": 13,
+   "h": 15,
    "x": 3,
-   "y": 0,
+   "y": 3,
    "i": "matrix",
    "moved": false,
    "static": false,
@@ -12,9 +12,9 @@
   },
   {
    "w": 5,
-   "h": 13,
+   "h": 26,
    "x": 19,
-   "y": 0,
+   "y": 3,
    "i": "patterns",
    "moved": false,
    "static": false,
@@ -22,63 +22,63 @@
   },
   {
    "w": 3,
-   "h": 13,
+   "h": 15,
    "x": 0,
-   "y": 0,
+   "y": 3,
    "i": "scenes",
    "moved": false,
    "static": false,
    "isVisible": true
   },
   {
-   "w": 17,
-   "h": 7,
+   "w": 24,
+   "h": 3,
    "x": 0,
-   "y": 13,
+   "y": 0,
    "i": "canvas",
    "moved": false,
    "static": false,
    "isVisible": true
   },
   {
-   "w": 7,
-   "h": 7,
-   "x": 17,
-   "y": 13,
+   "w": 10,
+   "h": 6,
+   "x": 9,
+   "y": 23,
    "i": "console",
    "moved": false,
    "static": false,
    "isVisible": true
   },
   {
-   "w": 8,
-   "h": 6,
+   "w": 19,
+   "h": 5,
    "x": 0,
    "y": 18,
-   "i": "globals",
-   "moved": false,
-   "static": false,
-   "isVisible": false
-  },
-  {
-   "w": 7,
-   "h": 13,
-   "x": 9,
-   "y": 18,
-   "i": "debugconsole",
-   "moved": false,
-   "static": false,
-   "isVisible": false
-  },
-  {
-   "w": 8,
-   "h": 3,
-   "x": 12,
-   "y": 0,
    "i": "pattern_history",
    "moved": false,
    "static": false,
-   "isVisible": false
+   "isVisible": true
+  },
+  {
+   "w": 9,
+   "h": 6,
+   "x": 0,
+   "y": 23,
+   "i": "globals",
+   "moved": false,
+   "static": false,
+   "isVisible": true
+  },
+  {
+   "w": 24,
+   "h": 9,
+   "x": 0,
+   "y": 29,
+   "i": "debugconsole",
+   "moved": false,
+   "static": false,
+   "isVisible": true
   },
   {
    "w": 7,

@@ -1,79 +1,80 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import {SubMenu, ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import Draggable from 'react-draggable';
 import Cell from './Cell'
 import _ from 'lodash';
+
 @inject('channelStore')
 @observer
 class ChannelHeader extends React.Component {
   
+
+// <input ref={(input_type) => { this.nameInputType = input_type; }}
+//     title={"Type ("+item.type+")"}
+//     className={"ChannelItemHeader-Text draggableCancel"}
+//     placeholder={" type "}  
+//     value={item.type}
+//     onChange={() => 
+//         (this.props.channelStore.changeChannelType(item.name, this.nameInputType.value))}
+//     onClick={() => 
+//             this.nameInputType.focus()} />
+    
   render() {
     console.log('RENDER CHANNEL HEADER');
     const item = this.props.value;
 
-    return (
-        <div className={"ChannelItemHeader " + item.type }>
-            <div className={"ChannelItemHeader-middle"}>
-                <div className={"ChannelItemHeader-titleDiv"}>
-                    <input ref={(input_name) => { this.nameInputName = input_name; }}
-                        title={"Channel Name (" + item.name + ")"}
-                        className={"ChannelItemHeader-title ChannelItemHeader-text draggableCancel"}
-                        placeholder={" name "}  
-                        value={item.name}
-                        onChange={() => 
-                            (this.props.channelStore.changeChannelName(item.name, this.nameInputName.value))}
+      return (<div>
+            <div className={"ChannelItemHeader " + item.type }>
+                <input ref={(input_name) => { this.nameInputName = input_name; }}
+                    title={"Channel Name (" + item.name + ")"}
+                    className={"ChannelItemHeader-Text draggableCancel"}
+                    placeholder={"name"}   
+                    style={{ width: '30%' }}  
+                    value={item.name}
+                    onChange={() => 
+                        (this.props.channelStore.changeChannelName(item.name, this.nameInputName.value))}
+                    onClick={() => 
+                        this.nameInputName.focus()} />
+                {this.props.channelStore.getChannelType(item.name) === "Tidal" && 
+                <input ref={(input_transition) => { this.nameInputTrans = input_transition; }}
+                    title={"Tidal Transition " + (item.transition === '' ? "NONE": "("+item.transition+")")}
+                    className={"ChannelItemHeader-Transition draggableCancel"}
+                    placeholder={"  ___"}  
+                    value={item.transition}
+                    onChange={() => 
+                        (this.props.channelStore.changeChannelTransition(item.name, this.nameInputTrans.value))}
+                    onClick={() => 
+                        this.nameInputTrans.focus()}/>}
+                <div className={"ChannelItemHeaderButtons"}>
+                    <button className={"Button "+ item.loop} title={'Loop'} onClick={() => 
+                        this.props.channelStore.toggleLoop(item.name)}>⭯</button>
+                    <button className={"Button "+ item.solo} title={'Solo'} onClick={() => 
+                        this.props.channelStore.toggleSolo(item.name)}>S</button>
+                    <button className={"Button "+ item.mute} title={'Mute'}
                         onClick={() => 
-                            this.nameInputName.focus()}/>
-                    <div className={"ChannelItemHeader-middle"}>
-                        <input ref={(input_type) => { this.nameInputType = input_type; }}
-                            title={"Type ("+item.type+")"}
-                            className={"ChannelItemHeader-text draggableCancel"}
-                            placeholder={" type "}  
-                            value={item.type}
-                            onChange={() => 
-                                (this.props.channelStore.changeChannelType(item.name, this.nameInputType.value))}
-                            onClick={() => 
-                                this.nameInputType.focus()}/>
-                        {this.props.channelStore.getChannelType(item.name) === "Tidal" && 
-                        <input ref={(input_transition) => { this.nameInputTrans = input_transition; }}
-                            title={"Tidal Transition " + (item.transition === '' ? "NONE": "("+item.transition+")")}
-                            className={"ChannelItemHeader-text draggableCancel"}
-                            placeholder={" transition "}  
-                            value={item.transition}
-                            onChange={() => 
-                                (this.props.channelStore.changeChannelTransition(item.name, this.nameInputTrans.value))}
-                            onClick={() => 
-                                this.nameInputTrans.focus()}/>}
-                    </div>
+                          this.props.channelStore.toggleMute(item.name)}>M</button>
+                  <button className={"Button"} title={'Delete'} onClick={() => 
+                        this.props.channelStore.deleteChannel(item.name)}>X</button>
                 </div>
+                
+            </div>
+            <div className={"ChannelItemHeader"}>
                 <div className={"ChannelItemHeader-time"}>
                     <input ref={(input_rate) => { this.nameInputRate = input_rate; }}
                         title={"Rate"}
-                        className={"ChannelItemHeader-text draggableCancel"}
-                        style={{width: '20%'}}
-                        placeholder={" rate "}  
+                        className={"ChannelItemHeader-Text draggableCancel"}
+                        placeholder={"rate"}    
                         value={item.rate}
-                        onChange={() => 
-                            (this.props.channelStore.changeChannelRate(item.name, this.nameInputRate.value))}
-                        onClick={() => 
-                            this.nameInputRate.focus()}/>
+                        onChange={() => (this.props.channelStore.changeChannelRate(item.name, this.nameInputRate.value))}
+                        onClick={() => this.nameInputRate.focus()}/>
+                    
                     <button className={"Button "+ item.gate} title={item.gate ? 'Pause': 'Play'}
                         onClick={() => (this.props.channelStore.toggleGate(item.name))}>{item.gate ? '●': '○'}</button>
-                    <button className={"Button"} title={'Reset'}
-                        onClick={() => (this.props.channelStore.resetTime(item.name))}>🡅</button>
+                    <button className={"Button"} title={'Reset Timer'}
+                      onClick={() => (this.props.channelStore.resetTime(item.name))}>🡅</button>
                 </div>
-            </div>
-            <div className={"ChannelItemHeaderButtons"}>
-                <button className={"Button"} title={'Delete'} onClick={() => 
-                    this.props.channelStore.deleteChannel(item.name)}>X</button>
-                <button className={"Button "+ item.solo} title={'Solo'} onClick={() => 
-                    this.props.channelStore.toggleSolo(item.name)}>S</button>
-                <button className={"Button "+ item.mute} title={'Mute'}
-                    onClick={() => 
-                    this.props.channelStore.toggleMute(item.name)}>M</button>
-                <button className={"Button "+ item.loop} title={'Loop'} onClick={() => 
-                    this.props.channelStore.toggleLoop(item.name)}>⭯</button>
-            </div>
+          </div>
         </div>
     );
   }
@@ -111,22 +112,26 @@ class Channel extends React.Component {
 @inject('channelStore')
 @observer
 export default class Grid extends React.Component {
+    
     onDragStop = (event, position) => {
-        console.log("ondrag", position);
-        let y =  _.toInteger(position.layerY/40)*40;
-        this.props.channelStore.seekTimer(y);
+        let stepIndex = _.toInteger((position.lastY-60)/40);
+        this.props.channelStore.seekTimer(stepIndex);
     }
     
     render() {
         console.log('RENDER GRID');
-        let pos;
-
-        // TODO: FIX SLIDER 'pos' 
         return (<div className={'AllChannels draggableCancel PanelAdjuster'}>    
-            <Draggable position={pos}
-                axis="y" bounds="parent"
-                grid={[40, 40]}
-                onStop={this.onDragStop.bind(this, pos)}>
+            <Draggable position={null}
+                defaultPosition={{x: 0, y: 60}}    
+                bounds={{
+                    left: 0,
+                    top: 60,
+                    right: 0,
+                    bottom: (this.props.channelStore.getMaxStep-1)*40+60
+                }}
+                axis={"y"}
+                grid={[6, 40]}
+                onStop={this.onDragStop}>
                 <div className="Timeline"></div>
             </Draggable>
                     
@@ -134,6 +139,7 @@ export default class Grid extends React.Component {
                 .map((t, i) => {
                     return <Channel key={t.scene+"_"+t.name} item={t} index={i}/>;
                 })}
+            
         </div>
         );
     }

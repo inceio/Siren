@@ -59,7 +59,7 @@ export default class Home extends React.Component {
     }
     else if (layoutItem.i === 'canvas') {
       return layoutItem.isVisible && (<div key={'canvas'}  id={'canvasLayout'} data-grid={layoutStore.gridParameters('canvas')} >
-        <div className={"PanelHeader"}> ■ PatternRoll
+        <div className={"PanelHeader"}> ■ Pattern Roll
           <span className={"PanelClose draggableCancel"} onClick={() => layoutStore.hideLayout("canvas")}>X</span>
         </div>
         <div className={'Canvas'}>
@@ -132,9 +132,9 @@ export default class Home extends React.Component {
         <div className={"PanelHeader"}> ■ Debug Console
           <span className={"PanelClose draggableCancel"} onClick={() => layoutStore.hideLayout("debugconsole")}>X</span>
         </div>
-        <div className={'Paths PanelAdjuster'}>
+        
         <DebugConsole/>
-        </div>
+        
       </div>);
     }
     else if (layoutItem.i === 'paths') {
@@ -154,7 +154,8 @@ export default class Home extends React.Component {
     }
   }
   handleRightClick = (param, event) => {
-    if (param.type === 'channelAdd') this.props.channelStore.addChannel('temp', '', 8, '');
+    if (param.type === 'channelAddTidal') this.props.channelStore.addChannel('d', 'Tidal', 8, '');
+    else if (param.type === 'channelAddSC') this.props.channelStore.addChannel('s', 'SuperCollider', 8, '');  
     else if (param.type === 'modulesRemove') this.props.layoutStore.hideLayout(param.val);
     else if (param.type === 'modulesAdd') this.props.layoutStore.showLayout(param.val);
     else if (param.type === 'layoutSave') this.props.layoutStore.save();
@@ -196,9 +197,8 @@ export default class Home extends React.Component {
         </ContextMenuTrigger>
       
         <ContextMenu id="global_context" className={"draggableCancel"}>
-          <MenuItem data={{value: 1}} onClick = {ctx.handleRightClick.bind(ctx,{type:'channelAdd', val:true})}>
-            Add Channel
-          </MenuItem>
+          <MenuItem data={{ value: 1 }} onClick={ctx.handleRightClick.bind(ctx, { type: 'channelAddTidal', val: true })}>Add Tidal Channel</MenuItem>
+          <MenuItem data={{ value: 1 }} onClick={ctx.handleRightClick.bind(ctx, { type: 'channelAddSC', val: true })}>Add SuperCollider Channel</MenuItem>
           <MenuItem divider />
           <MenuItem onClick={save} data={{ item: 'reset' }}>Save Scene</MenuItem>
           <MenuItem onClick={ctx.handleRightClick.bind(ctx,{type:'layoutSave'})} data={{ item: 'reset' }}>Save Layout</MenuItem>

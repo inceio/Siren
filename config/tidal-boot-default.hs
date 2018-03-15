@@ -7,9 +7,6 @@ import Sound.Tidal.Utils
 import Data.Maybe (fromMaybe, maybe, isJust, fromJust)
 import Control.Applicative
 
-import Sound.Tidal.MIDI.CC
-import Sound.Tidal.MIDI.Context
-
 (cps, getNow) <- bpsUtils
 
 (d1,t1) <- superDirtSetters getNow

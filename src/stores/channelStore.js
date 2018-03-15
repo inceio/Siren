@@ -60,12 +60,9 @@ class ChannelStore
             ch.time = 0;
         }
     }
-    @action seekTimer(timey) {
-        console.log(timey);
-        let time = (timey-40)/40;
-        console.log(time);
+    @action seekTimer(index) {
         _.forEach(_.filter(this.channels, ['scene', sceneStore.active_scene]), (channel, i) => {            
-            channel.time = time ;
+            channel.time = (index >= channel.steps ? channel.steps-1: index);
         });
     }
     // Update the timer values based on the pulse 
@@ -111,6 +108,15 @@ class ChannelStore
 
     @computed get getActiveChannels() {
         return this.channels.filter(c => c.scene === sceneStore.active_scene);
+    }
+
+    @computed get getMaxStep() { 
+        if(this.getActiveChannels.length > 0){
+            return _.maxBy(this.getActiveChannels, 'steps').steps;
+        }
+        else{
+            return 0;
+        }
     }
 
     @action overwriteCell(scene_channel_index, cell_index, value) {

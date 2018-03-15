@@ -71,11 +71,9 @@
   border: 1px solid rgba(125,125,125, 0.8);
   cursor: pointer;
   padding: 3px 3x 3px 3px;
-  /* padding: 0.30vh 0.24vw 0.30vh 0.24vw; */
 }
 .Button:hover {
   /* border: 1px solid rgba(200,200,200, 0.8); */
-  box-shadow: inset  0px 0px 5px rgba(200,200,200, 0.8);
   background: rgba(255, 255, 158, 0.15);
   color: white;
 }
@@ -346,6 +344,7 @@ div.cm-s-_style.CodeMirror-wrap {
   position: fixed;
   display: inline-flex;
   height: 25px;
+  line-height: 15px;
   width: calc(100%);
   vertical-align: middle; 
   justify-content: space-between;
@@ -406,7 +405,7 @@ div.cm-s-_style.CodeMirror-wrap {
   box-shadow: inset 0px 0px 50px rgba(0,0,0, 1);
   width: 20px;
   background: rgba(200, 200, 200, 0.15);
-  height: 40px;
+  height: 38px;
   cursor: ns-resize;
   z-index: 500;
   box-shadow: inset 0px 0px 15px rgba(0,0,0, 0.25);
@@ -450,72 +449,41 @@ div.cm-s-_style.CodeMirror-wrap {
 
 /* Matrix header styling*/
 .ChannelItemHeader {
-  display: inline-flex;
-  height: 80px;
+  display: flex;
+  height: 25px;
   width: 100%;
-  justify-content: space-between;
-  background: rgba(200,200,200,0.1);
-  /*border: 0.5px solid rgba(200, 200, 200, 0.75);*/
-  font-size: 16px;
-  line-height: 80px;
+  background: rgba(200,200,200,0.3);
+  line-height: 25px;
   font-weight: bold;
   margin-bottom: 5px;
 
   transition: background-color 100ms ease-in-out;
 }
 
-.ChannelItemHeader-middle {
-  display: flex;
-  flex-direction: column;
-  width: 90%; 
-  /* padding: 5px; */
+.ChannelItemHeader-Text {
+  padding-left: 7px;
+  font-size: 12px;
+  border: none;
 }
-.ChannelItemHeader-titleDiv {
-  display: inline-flex;
-  justify-content: space-around;
-  width: 100%; 
-  height: calc(100% - 20px);
-  margin: 0 5px 5px 0;
-  border-bottom: 1px dashed rgba(0,0,0, 0.2);
+.ChannelItemHeader-Transition {
+  padding-left: 2px;
+  font-size: 10px;
+  border: none;
 }
 .ChannelItemHeader-time {
   display: inline-flex;
   justify-content: space-around;
   width: 100%; 
-  height: 20px;
-  margin: 0 5px 5px 0;
-  
+  height: 25px;
 }
-.ChannelItemHeader-time button{
-  /* height: 30px; */
-  /* margin-top: 5px; */
-  padding: 0 15px 0 15px;
+.ChannelItemHeader-time button {
+  width: 35%;
 }
-.ChannelItemHeader-time input{
-  /* border: 1px solid rgba(30, 30, 30, 0.5); */
-  /* box-shadow:  0px 0px 5px rgba(0,0,0, 0.3); */
-}
+
+
 /*Individual Transition Cells*/
-.ChannelItemHeader-text {
-  /* width: 100%; */
-  /* height: 30px; */
-  /* margin: 5px 0 5px 0; */
-  font-size: 12px;
-  text-align: center;
-  vertical-align: center;
-  overflow-y: auto;
-  border: none;
-  /* background: rgba(0, 0, 0, 0.1); */
-  /* border: 1px dashed rgba(30, 30, 30, 0.5); */
-  /* box-shadow:  0px 0px 5px rgba(0,0,0, 0.3); */
-}
-.ChannelItemHeader-title {
-  font-size: 16px;
-  width: 40%;
-}
-.ChannelItemHeader-text::-webkit-input-placeholder {
-  color:rgba(30, 30, 30, 0.5);
-  font-weight: bold;
+.ChannelItemHeader-Transition::-webkit-input-placeholder {
+  color: rgba(200,200,200,0.5);
   /* box-shadow:  0px 0px 5px rgba(0,0,0, 0.3); */
 }
 
@@ -528,35 +496,28 @@ div.cm-s-_style.CodeMirror-wrap {
 
 .ChannelItemHeaderButtons {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+  flex-direction: row;
   height: 100%;
-  /* padding: 0 0 0 3px; */
+  width: 100%;
 }
-.ChannelItemHeader p {
-  font-family: 'Inconsolata';
-  font-weight: bolder;
-  justify-content: center;
-  vertical-align: middle; 
-  color: #ccc;
-  line-height: 40px;
-  margin: 0 10px 0 10px;
-}
-.Audio {
+
+/* .Audio {
   background: rgba(42, 85, 110, 1);
 }
 .SCSynth {
   background: rgba(42, 85, 110, 1);
-}
+} */
 .Tidal {
   background: rgba(42, 85, 110, 1);
 }
-.Visual {
+/* .Visual {
   background: rgba(152, 122, 40, 1);
-}
+} */
 .SuperCollider {
-  background: rgba(200,200,200,0.4);
+  background: rgba(172, 87, 60, 1)
 }
-.Tidal-MIDI {
+/* .Tidal-MIDI {
   background: rgba(172, 87, 60, 1)
 }
 .MIDI {
@@ -564,7 +525,7 @@ div.cm-s-_style.CodeMirror-wrap {
 }
 .PatternRoll {
   background: rgba(94, 12, 60, 1)
-}
+} */
 
 /*Individual Grid Cells*/
 .GridItem {
@@ -579,6 +540,7 @@ div.cm-s-_style.CodeMirror-wrap {
   vertical-align: center;
   border: none;
   background: rgba(0,0,0,0.3);
+  padding: 0 2px 0 2px;
 }
 .GridItem.even {
   background: rgba(0,0,0,0.45);
@@ -619,12 +581,12 @@ div.cm-s-_style.CodeMirror-wrap {
   font-weight: bold;
 
 }
-.GridItem-transition::-webkit-input-placeholder { /* Chrome */
+/* .GridItem-transition::-webkit-input-placeholder {
   color: #ccc;
   opacity: 0.8;
   font-size: 12px;
   transition: opacity 250ms ease-in-out;
-}
+} 
 .GridItem-transition:focus::-webkit-input-placeholder {
   opacity: 0.5;
-}
+} */

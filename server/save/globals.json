@@ -46,5 +46,29 @@
   "transformer": "off 0.5 (#speed 2)$",
   "modifier": "#s \"bass2\" #cut 2",
   "param": ""
+ },
+ {
+  "channels": "0",
+  "transformer": "juxBy 0.2 (#speed \"<4 2>\") $trunc 0.5 $ ",
+  "modifier": "#end 0.2",
+  "param": "let gx = 0"
+ },
+ {
+  "channels": "2 3 1 4 5",
+  "transformer": "trunc 0.2 $off 0.5 (|+|up \"<0.5 2 5>\")$",
+  "modifier": "#end 0.02",
+  "param": ""
+ },
+ {
+  "channels": "2 3 1 4 5 6",
+  "transformer": "",
+  "modifier": "#end 0.02 #legato 0.02",
+  "param": ""
+ },
+ {
+  "channels": "1 2 3 4",
+  "transformer": "off 0.5 (|*|up \"<2 4 5>\")$",
+  "modifier": "#s \"gen3\" #end 0.2 ",
+  "param": ""
  }
 ]

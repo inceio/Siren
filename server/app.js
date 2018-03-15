@@ -10,7 +10,7 @@ const socketIo = require('socket.io');
 const exec = require('child_process').exec;
 const osc = require("osc");
 const Queue = require('better-queue');
-const nanoKONTROL = require('korg-nano-kontrol');
+//const nanoKONTROL = require('korg-nano-kontrol');
 // timers
 const abletonlink = require('abletonlink');
 const link = new abletonlink();
@@ -33,16 +33,17 @@ class REPL {
 
   doSpawn(config, reply) {
     this.repl = spawn(config.ghcipath, ['-XOverloadedStrings']);
-  
-    // this.repl.stderr.on('data', (data) => {
-    //   console.error(data.toString('utf8'));
-    //   dcon.sockets.emit('dcon', ({dcon: data.toString('utf8')}));
-    // });
-    // this.repl.stdout.on('data', data => {
-    //   console.error(data.toString())
-    //   dcon.sockets.emit('dcon', ({dcon: data.toString('utf8')}));
-    // });
-    // console.log(" ## -->   GHC Spawned");
+    
+    let tidalog = socketIo.listen(4003);
+    this.repl.stderr.on('data', (data) => {
+      console.error(data.toString('utf8'));
+      tidalog.sockets.emit('/scdebuglog', {msg: data.toString('utf8')});
+    });
+    this.repl.stdout.on('data', data => {
+      console.error(data.toString())
+      tidalog.sockets.emit('/scdebuglog', {msg: data.toString('utf8')});
+    });
+    console.log(" ## -->   GHC Spawned");
 
     // // python print
     // python.stdout.on('data', function(data){
@@ -54,65 +55,65 @@ class REPL {
     // });
 
     // KORG 
-    let nano_socket = socketIo.listen(4003);
-    nanoKONTROL.connect('nanoKONTROL2').then((device) => {
+    // let nano_socket = socketIo.listen(4003);
+    // nanoKONTROL.connect('nanoKONTROL2').then((device) => {
       
-      device.on('slider:*', function(value){
-        //console.log(this.event+' => '+value);
-        //SuperCollider
-        let scorbit;
-        let slider_value = value.map(0, 127, 0, 2);
-        let slider_index = _.replace(this.event,"slider:","")
-        let sc_msg = "~dirt.orbits[" + slider_index+ "].set(\\amp,"+ slider_value + ");"// reduce the amplitude of one orbit
-        SirenComm.siren_console.sendSCLang(sc_msg); 
+    //   device.on('slider:*', function(value){
+    //     //console.log(this.event+' => '+value);
+    //     //SuperCollider
+    //     let scorbit;
+    //     let slider_value = value.map(0, 127, 0, 2);
+    //     let slider_index = _.replace(this.event,"slider:","")
+    //     let sc_msg = "~dirt.orbits[" + slider_index+ "].set(\\amp,"+ slider_value + ");"// reduce the amplitude of one orbit
+    //     SirenComm.siren_console.sendSCLang(sc_msg); 
 
-        //last 2 dif functions
-      });
+    //     //last 2 dif functions
+    //   });
       
-      device.on('knob:*', function(value){
-        // console.log(this.event+' => '+value);
-        let knob_value = value.map(0, 127, 0, 2);
-        let knob_index = _.replace(this.event,"knob:","");
+    //   device.on('knob:*', function(value){
+    //     // console.log(this.event+' => '+value);
+    //     let knob_value = value.map(0, 127, 0, 2);
+    //     let knob_index = _.replace(this.event,"knob:","");
 
-        nano_socket.sockets.emit('/nanoknob', {index: knob_index, value: knob_value});
-      });
+    //     nano_socket.sockets.emit('/nanoknob', {index: knob_index, value: knob_value});
+    //   });
       
-      device.on('button:**', function(value){
-        // console.log(this.event+' => '+value);
-        //gate: false ,solo: false, mute: false, loop: true//
-        let button_value = value;
-        let button_index = _.replace(this.event,"button:","");
-        // console.log(button_index);
-        switch (button_index) {
-          case 'next':
+    //   device.on('button:**', function(value){
+    //     // console.log(this.event+' => '+value);
+    //     //gate: false ,solo: false, mute: false, loop: true//
+    //     let button_value = value;
+    //     let button_index = _.replace(this.event,"button:","");
+    //     // console.log(button_index);
+    //     switch (button_index) {
+    //       case 'next':
       
-            break;
-          case 'prev':
+    //         break;
+    //       case 'prev':
             
-            break;
-          case 'play':
-            if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: true});
-            break;
-          case 'stop':
-            if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: false});
-            break;
-          case 'rec':
-            if(button_value === 'true'){
-              let sc_msg = "Server.default.record;"; SirenComm.siren_console.sendSCLang(sc_msg); 
-            }
-            else{
-              let sc_msg = "Server.default.stopRecording"; SirenComm.siren_console.sendSCLang(sc_msg); 
-            }
-            break;        
-          default:
-            break;
-        }
-        button_index = _.replace(button_index, ":", "");
-        if(button_index !== undefined){
-          nano_socket.sockets.emit('/nanobutton', {type:button_index[0], index: button_index[1], value: button_value});
-        }
-      });
-    });
+    //         break;
+    //       case 'play':
+    //         if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: true});
+    //         break;
+    //       case 'stop':
+    //         if(button_value === true) nano_socket.sockets.emit('/nanostart', {trigger: false});
+    //         break;
+    //       case 'rec':
+    //         if(button_value === 'true'){
+    //           let sc_msg = "Server.default.record;"; SirenComm.siren_console.sendSCLang(sc_msg); 
+    //         }
+    //         else{
+    //           let sc_msg = "Server.default.stopRecording"; SirenComm.siren_console.sendSCLang(sc_msg); 
+    //         }
+    //         break;        
+    //       default:
+    //         break;
+    //     }
+    //     button_index = _.replace(button_index, ":", "");
+    //     if(button_index !== undefined){
+    //       nano_socket.sockets.emit('/nanobutton', {type:button_index[0], index: button_index[1], value: button_value});
+    //     }
+    //   });
+    // });
   }
 
   initGHC(config) {

@@ -103,10 +103,10 @@ class GlobalStore
             if (gbchan === undefined ||gbchan[0] === undefined || gbchan[0] === ' ' || gbchan[0] ==='0' ){
                 console.log("Global All channels");
                 for (let i = 0; i < activePatternsLen; i++) {
-                    if(activePatterns[i][0] !== undefined && activePatterns[i][0].pattern !== ''){
-                        console.log("HERE");
-                        let patternbody = activePatterns[i][0].pattern.substring(_.indexOf(activePatterns[i][0].pattern, "$")+1);
-                        let patname = activePatterns[i][0].pattern.substring(0,_.indexOf(activePatterns[i][0].pattern, "$")+1 );
+                    let curPat = _.last(activePatterns[i]);
+                    if(curPat !== undefined && curPat.pattern !== ''){
+                        let patternbody = curPat.pattern.substring(_.indexOf(curPat.pattern, "$")+1);
+                        let patname = curPat.pattern.substring(0,_.indexOf(curPat.pattern, "$")+1 );
                         let pattern = patname + transformer + patternbody + modifier;
                         console.log(pattern);
                         ctx.submitGHC(pattern);
@@ -114,20 +114,21 @@ class GlobalStore
                 }
             }
             else {
-                _.forEach( gbchan, function(chan, j){
-                    if(chan !== undefined && activePatterns[j] !== undefined){
+                for(let j = 0; j < gbchan.length; j++){
+                    if(activePatterns[j] !== undefined){
                         console.log("Global individual channel");
                         if(activePatterns[j][0] !== undefined){
-                            if(activePatterns[j][0].pattern.text !== ''){
-                                let patternbody = activePatterns[j][0].pattern.substring(_.indexOf(activePatterns[j][0].pattern, "$")+1);
-                                let patname = activePatterns[j][0].pattern.substring(0,_.indexOf(activePatterns[j][0].pattern, "$")+1 );
+                            let curPat = _.last(activePatterns[j]);
+                            if(curPat !== undefined && curPat.pattern !== ''){
+                                let patternbody = curPat.pattern.substring(_.indexOf(curPat.pattern, "$")+1);
+                                let patname = curPat.pattern.substring(0,_.indexOf(curPat.pattern, "$")+1 );
                                 let pattern = patname + transformer + patternbody + modifier;
                                 console.log(pattern);
                                 ctx.submitGHC(pattern);
                             }
                         }
                     }       
-                });
+                }
             }
         }
         if(this.global_param!== undefined) ctx.submitGHC(this.global_param);

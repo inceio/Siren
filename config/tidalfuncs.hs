@@ -1,5 +1,6 @@
 
 import Sound.Tidal.Chords
+import Sound.Tidal.Scales
 import Sound.Tidal.Utils
 import Data.Maybe (fromMaybe, maybe, isJust, fromJust)
 import Control.Applicative
@@ -22,9 +23,8 @@ let cap a b p = within (0.25, 0.75) (slow 2 . rev . stut 8 a b) p
     foldcxx a f p = superimpose (((a/2 + a*2) ~>) . f) $ superimpose (((a + a/2) ~>) . f) $ p
     foldcx a p = foldcxx a ((|*| end "0.2") . (|=| begin "0.05") . (|*| speed "2")) p
     foldc p = foldcx 0.33 p
-    wchoose weights values = choose $ concatMap (\x -> replicate (fst x) (snd x)) (zip weights values)
-    jit start amount p = within (start, (start + 0.5)) (trunc (amount)) p
-    chordTable = Chords.chordTable
+    shift p = (1024 <~)  p
+    shift' x p = (x <~) p
     scaleTable = Scales.scaleTable
     majork = ["major", "minor", "minor", "major", "major", "minor", "dim7"]
     minork = ["minor", "minor", "major", "minor", "major", "major", "major"]
@@ -50,16 +50,14 @@ let cap a b p = within (0.25, 0.75) (slow 2 . rev . stut 8 a b) p
     scaleP' sp p = (\n scalePat -> noteInScale scalePat n) <$> p <*> sp
    where octave s x = x `div` (length s)
          noteInScale s x = (s !!! x) + (12 * octave s x)
-    chordProg roots chords = (\x l -> fmap (+ (x)) l) <$> roots <*> chordL chords
-    arpChordProg roots chords arplfo rhythm = scaleP' (chordProg roots chords) (c2p' rhythm arplfo)
     up' p = up (fmap fromIntegral p)
-let contToPat  n p = round <$> discretise n p
-let contToPat' a b = round <$> struct a b
-let c2p  = contToPat
-let c2p' = contToPat'
-let scaleP' sp p = (\n scalePat -> noteInScale scalePat n) <$> p <*> sp
+    contToPat  n p = round <$> discretise n p
+    contToPat' a b = round <$> struct a b
+    c2p  = contToPat
+    c2p' = contToPat'
+    scaleP' sp p = (\n scalePat -> noteInScale scalePat n) <$> p <*> sp
    where octave s x = x `div` (length s)
          noteInScale s x = (s !!! x) + (12 * octave s x)
-let harmonise ch p = scaleP ch p + chord (flip (!!!) <$> p <*> keyL ch)         
+    harmonise ch p = scaleP ch p + chord (flip (!!!) <$> p <*> keyL ch)         
 
 
