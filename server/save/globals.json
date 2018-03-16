@@ -70,5 +70,29 @@
   "transformer": "off 0.5 (|*|up \"<2 4 5>\")$",
   "modifier": "#s \"gen3\" #end 0.2 ",
   "param": ""
+ },
+ {
+  "channels": "0",
+  "transformer": "off 0.5 (|*|up \"<2 3 >\")$",
+  "modifier": "#end 0.02 #comp 0.5 #cut 1 ",
+  "param": ""
+ },
+ {
+  "channels": "0",
+  "transformer": "",
+  "modifier": "#fmf 0.6 #fmf 300",
+  "param": ""
+ },
+ {
+  "channels": "1 2",
+  "transformer": "trunc 0.2 $off 0.5 (#coarse 2 )$",
+  "modifier": "#end 0.02 #lpf 3000 #lpq 0.2",
+  "param": ""
+ },
+ {
+  "channels": "1",
+  "transformer": "nToOrbit $",
+  "modifier": "#s (stack[\"gen4\",\"md1\"]) #coarse 2 #end 0.2",
+  "param": ""
  }
 ]
