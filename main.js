@@ -16,7 +16,13 @@ function createWindow() {
     mainWindow.setMenu(null);
     
     // Specify entry point
-    mainWindow.loadURL('http://localhost:3000/#/')
+    const startUrl = process.env.ELECTRON_START_URL || url.format({
+        pathname: path.join(__dirname, '/../server/build/index.html'),
+        protocol: 'file:',
+        slashes: true
+    });
+    mainWindow.loadURL(startUrl);
+    //mainWindow.loadURL('http://localhost:3000/#/')
 
     // Show dev tools
     // Remove this line before distributing

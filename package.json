@@ -7,6 +7,7 @@
   "license": "MIT",
   "devDependencies": {
     "custom-react-scripts": "0.2.0",
+    "foreman": "^2.0.0",
     "gh-pages": "^1.0.0"
   },
   "dependencies": {
@@ -57,9 +58,11 @@
     "eject": "react-scripts eject",
     "sirenc": "node server/start.js & react-scripts start & electron main.js ",
     "electron": "electron main.js ",
+    "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "siren": "node server/start.js",
     "windows": "npm run siren & start powershell {npm start}",
     "predeploy": "npm run build",
+    "dev": "nf start",
     "deploy": "gh-pages -d build"
   }
 }

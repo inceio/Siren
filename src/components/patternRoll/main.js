@@ -178,7 +178,7 @@ export default function patternRoll (p) {
 
   // KEYBOARD INTERACTIONS
   p.keyTyped = function () {
-    if (p.key === 'l')  isLabels = !isLabels;
+  //  if (p.key === 'l')  isLabels = !isLabels;
   }
 
   p.draw = function () {

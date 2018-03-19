@@ -13,7 +13,7 @@
   "lea2",
   "lmd"
  ],
- "active_s": "machine",
+ "active_s": "lea2",
  "patterns": [
   {
    "scene": "default",
